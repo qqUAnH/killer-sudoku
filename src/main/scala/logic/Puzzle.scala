@@ -25,6 +25,4 @@ class Puzzle {
   def allrows(): Vector[Row] = this.rows
 
   def allcolumns() :Vector[Column] = this.columns
-
-
 }
