@@ -5,6 +5,7 @@ object Game extends App {
   
   def readfile() = Array.tabulate(81)(x => x+1)
   
+  
   private val puzzle = Puzzle()
   
   this.puzzle.setUpPuzzle(readfile())
