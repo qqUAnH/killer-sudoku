@@ -14,4 +14,5 @@ object Game extends App {
   this.puzzle.square(20).setValue(9999)
 
 
+
 }
