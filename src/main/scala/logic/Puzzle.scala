@@ -1,7 +1,7 @@
 package logic
 
 class Puzzle {
-  private val squares = Vector.tabulate(81)( x => Square(0,x)   )
+  private val squares = Vector.tabulate(81)( x => Square(0,x,this))
   private val columns = Vector.tabulate(9) ( x => Column(this,x))
   private val rows    = Vector.tabulate(9) ( x => Row   (this,x))
   private val boxes   = Vector.tabulate(9) ( x => Box   (this,x))
