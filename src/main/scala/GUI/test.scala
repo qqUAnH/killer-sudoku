@@ -31,7 +31,13 @@ import scalafx.scene.paint.Color.*
 import scalafx.scene.layout.*
 import scalafx.beans.property.*
 import Game.Game
+import javafx.animation.AnimationTimer
+import javafx.event.ActionEvent
+import javafx.scene.input.{KeyEvent, MouseEvent}
+import scalafx.scene.layout.GridPane.{getColumnIndex, getRowIndex}
 import scalafx.scene.paint.Color
+import scalafx.application.Platform
+import scalafx.animation.AnimationTimer
 
 import scala.language.postfixOps
 
@@ -40,15 +46,12 @@ object Main extends JFXApp3:
   //SHould some be used in this situation
   val sodoku=Game.puzzle
 
+
   def start(): Unit =
 
 
     //NOte for references LOL
     //https://stackoverflow.com/questions/46997267/how-do-i-insert-text-into-a-shape-in-javafx
-
-
-
-
 
     /*
     Creation of a new primary stage (Application window).
@@ -59,16 +62,17 @@ object Main extends JFXApp3:
       title = "SODOKU"
       width = 500
       height = 500
+      resizable = false
     /*
     Create root gui component, add it to a Scene
     and set the current window scene.
     */
     val root = GridPane()
     val scene = Scene( parent =root)
-    stage.scene =scene
 
 
-    // should I use some
+    stage.scene = scene
+
     def rectangle():shape.Rectangle = new shape.Rectangle:
       fill=White
       x = 0
@@ -76,31 +80,24 @@ object Main extends JFXApp3:
       width = 50
       height = 50
       var i = 0
-      hover.onChange(
-        (_,_,_) =>
-          if i == 0 then
-            fill.update(Gray)
-            i = 1
-          else
-            fill.update(White)
-            i = 0
-      )
 
 
-
-      // why binding don't work
-
-
-
-
-
-
-    def createStackPane(squareposition: Int) = new StackPane:
+    def createStackPane(x:Int,y:Int) = new StackPane:
+      this.focusTraversable = true
+      root.add(this,x,y)
       val rect = rectangle()
-      val square = sodoku.square(squareposition)
-      val number = new Text(""+square.value)
-      val path = new Path
+      val square = sodoku.square(x+y*9)
+      val numberProperty = StringProperty(""+square.value)
+      val number = Text(""+square.value)
+      val canvas = new Canvas(50,50)
+      number.textProperty().bind(numberProperty)
 
+
+      def stackchildren = this.children
+
+
+      var i = 0
+      val path = new Path
       path.elements += MoveTo(0,0)
       path.elements += VLineTo(50)
       path.elements += HLineTo(50)
@@ -108,18 +105,25 @@ object Main extends JFXApp3:
       path.elements += HLineTo(0)
       path.elements += new ClosePath()
 
+      this.onKeyPressed = (ke:KeyEvent) =>{
+        numberProperty.set(""+2)
+        println("A")
+      }
+      hover.onChange (
+        (_,_,_) =>
+          if i == 0 then
+            rect.fill.update(Gray)
+            i = 1
+          else
+            rect.fill.update(White)
+            i = 0)
+      this.onMouseClicked = (e:MouseEvent) => {
+        println( "aaa" +"")
+        this.requestFocus()
+      }
 
+      this.children.addAll(rect,path,number)
 
-      this.children.addAll(rect,number,path)
-
-
-
-
-
-    for {x <- 0 until 9
-         y <- 0 until 9
-         } do
-      root.add(createStackPane(x+y*9),x,y)
 
     def createColumnConstraints(): ColumnConstraints =
       new ColumnConstraints :
@@ -128,5 +132,15 @@ object Main extends JFXApp3:
       new RowConstraints :
         percentHeight = 10
 
+    for {x <- 0 until 9
+         y <- 0 until 9
+         } do
+      createStackPane(x,y)
+
     root.columnConstraints = Array.tabulate(9)(x=> createColumnConstraints())
     root.rowConstraints = Array.tabulate(9)(x => createRowConstraints())
+    val timer =  scalafx.animation.AnimationTimer( t=>{
+
+    })
+    timer.start()
+

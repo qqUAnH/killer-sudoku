@@ -42,24 +42,33 @@ end Box
 
 class Column(puzzle: Puzzle, val position: Int) extends Iterable[Square]with Area:
   val squares:Buffer[Square]= Buffer[Square]()
+
   def iterator = squares.iterator
+
   override def addSquare(square: Square): Unit =
     this.squares += square
     square.column = this
-  override def validate(number: Int): Boolean =  number < 10 && number > 0 && !usedDigits.contains(number) 
+
+  override def validate(number: Int): Boolean =  number < 10 && number > 0 && !usedDigits.contains(number)
 end Column
 
 
 class SubArea(puzzle: Puzzle,val sum:Int) extends Iterable[Square] with Area:
   val squares:Buffer[Square]= Buffer[Square]()
+  
+  val Color = None
 
   def currentSum = squares.foldLeft(0)( (current ,next) => current + next.value)
   
   def iterator = squares.iterator
+
   override def addSquare(square: Square): Unit =
     this.squares += square
     square.subArea = this
-  
+
+  def neigbor: Vector[SubArea] =
+    this.squares.flatMap( square => square.neighbor()).filter( _ != this).map( x => x.subArea).distinct.toVector
+
   override def validate(number: Int): Boolean =  number < 10 && number > 0 && ( currentSum -number) > 0
   
 end SubArea
