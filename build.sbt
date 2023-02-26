@@ -3,8 +3,8 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := "3.2.2"
 
 //Add scalafx dependency
-libraryDependencies += "org.scalafx" %% "scalafx-extras" % "0.7.0"
-libraryDependencies += "org.scalafx" % "scalafx_3" % "19.0.0-R30"
+
+libraryDependencies += "org.scalafx" %% "scalafx" % "16.0.0-R24"
 lazy val osName = System.getProperty("os.name") match {
   case n if n.startsWith("Linux")   => "linux"
   case n if n.startsWith("Mac")     => "mac"
@@ -14,7 +14,7 @@ lazy val osName = System.getProperty("os.name") match {
 //add javafx dependency
 lazy val javaFXModules = Seq("base", "controls", "fxml", "graphics", "media", "swing", "web")
 libraryDependencies ++= javaFXModules.map( m =>
-  "org.openjfx" % s"javafx-$m" % "14.0.1" classifier osName
+  "org.openjfx" % s"javafx-$m" % "16" classifier osName
 )
 
 //Add scala test dependency
