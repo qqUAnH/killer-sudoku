@@ -3,6 +3,7 @@ package logic
 
 import scala.collection.mutable.Buffer
 import scala.collection.Iterator
+import scalafx.scene.paint.Color
 
 trait Iterator[Square]:
   def hasNext:Boolean
@@ -24,7 +25,7 @@ class Row(puzzle: Puzzle,val position: Int) extends Iterable[Square] with Area:
   def iterator = squares.iterator
   override def addSquare(square: Square): Unit =
     this.squares += square
-    square.row = this
+    square.row = Some(this)
 
   override def validate(number: Int): Boolean =  number < 10 && number > 0 && !usedDigits.contains(number) 
 end Row
@@ -35,7 +36,7 @@ class Box(puzzle: Puzzle, val position: Int) extends Iterable[Square] with Area:
   def iterator = squares.iterator
   override def addSquare(square: Square): Unit =
     this.squares += square
-    square.box = this
+    square.box = Some(this)
   override def validate(number: Int): Boolean =  number < 10 && number > 0 && !usedDigits.contains(number) 
 end Box
 
@@ -47,16 +48,19 @@ class Column(puzzle: Puzzle, val position: Int) extends Iterable[Square]with Are
 
   override def addSquare(square: Square): Unit =
     this.squares += square
-    square.column = this
+    square.column = Some(this)
 
   override def validate(number: Int): Boolean =  number < 10 && number > 0 && !usedDigits.contains(number)
 end Column
 
 
 class SubArea(puzzle: Puzzle,val sum:Int) extends Iterable[Square] with Area:
+
   val squares:Buffer[Square]= Buffer[Square]()
   
-  val Color = None
+  var color:Some[Color]  = Some(Color.White)
+
+  var possibleColor : Vector[Color] = Vector(Color.LightCyan,Color.LightCoral,Color.Lavender,Color.OrangeRed)
 
   def currentSum = squares.foldLeft(0)( (current ,next) => current + next.value)
   
@@ -64,10 +68,17 @@ class SubArea(puzzle: Puzzle,val sum:Int) extends Iterable[Square] with Area:
 
   override def addSquare(square: Square): Unit =
     this.squares += square
-    square.subArea = this
+    square.subArea = Some(this)
 
   def neigbor: Vector[SubArea] =
-    this.squares.flatMap( square => square.neighbor()).filter( _ != this).map( x => x.subArea).distinct.toVector
+    this.squares.flatMap( square => square.neighbor()).filter( square => square.subArea.get != this).map( square => square.subArea.get).distinct.toVector
+
+  def updatePossibleColor() =
+    val usedColor =this.neigbor.filter( x=> x.color.isDefined).map( x => x.color.get)
+    this.possibleColor = this.possibleColor.filter( color=> !usedColor.contains(color))
+
+  def setColor(newColor:Color) =
+    this.color = Some(newColor)
 
   override def validate(number: Int): Boolean =  number < 10 && number > 0 && ( currentSum -number) > 0
   

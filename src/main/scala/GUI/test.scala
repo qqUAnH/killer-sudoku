@@ -45,14 +45,11 @@ import scala.language.postfixOps
 object Main extends JFXApp3:
   //SHould some be used in this situation
   val sodoku=Game.puzzle
-
-
   def start(): Unit =
 
 
     //NOte for references LOL
     //https://stackoverflow.com/questions/46997267/how-do-i-insert-text-into-a-shape-in-javafx
-
     /*
     Creation of a new primary stage (Application window).
     We can use Scala's anonymous subclass syntax to get quite
@@ -85,12 +82,17 @@ object Main extends JFXApp3:
     def createStackPane(x:Int,y:Int) = new StackPane:
       this.focusTraversable = true
       root.add(this,x,y)
+
       val rect = rectangle()
+
       val square = sodoku.square(x+y*9)
       val numberProperty = StringProperty(""+square.value)
       val number = Text(""+square.value)
       val canvas = new Canvas(50,50)
       number.textProperty().bind(numberProperty)
+
+
+      rect.fill = if this.square.subArea.isDefined then this.square.subArea.get.color.get else White
 
 
       def stackchildren = this.children
@@ -115,7 +117,8 @@ object Main extends JFXApp3:
             rect.fill.update(Gray)
             i = 1
           else
-            rect.fill.update(White)
+            //THis neeed to change
+            rect.fill.update(square.subArea.get.color.getOrElse(White))
             i = 0)
       this.onMouseClicked = (e:MouseEvent) => {
         println( "aaa" +"")
