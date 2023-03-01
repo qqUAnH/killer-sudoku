@@ -13,9 +13,9 @@ end Iterator
 
 trait Area:
   val squares:Buffer[Square]
-  def usedDigits: Buffer[Int] = squares.map( square => square.value)
+  def usedDigits: Buffer[Int] = squares.map( square => square.value).filter( _ != 0)
   def addSquare(square:Square) :Unit
-  def validate(number :Int) : Boolean
+  def validate() =usedDigits.distinct.length == usedDigits.length
 
 
 
@@ -27,7 +27,6 @@ class Row(puzzle: Puzzle,val position: Int) extends Iterable[Square] with Area:
     this.squares += square
     square.row = Some(this)
 
-  override def validate(number: Int): Boolean =  number < 10 && number > 0 && !usedDigits.contains(number) 
 end Row
 
 
@@ -37,7 +36,7 @@ class Box(puzzle: Puzzle, val position: Int) extends Iterable[Square] with Area:
   override def addSquare(square: Square): Unit =
     this.squares += square
     square.box = Some(this)
-  override def validate(number: Int): Boolean =  number < 10 && number > 0 && !usedDigits.contains(number) 
+
 end Box
 
 
@@ -50,7 +49,6 @@ class Column(puzzle: Puzzle, val position: Int) extends Iterable[Square]with Are
     this.squares += square
     square.column = Some(this)
 
-  override def validate(number: Int): Boolean =  number < 10 && number > 0 && !usedDigits.contains(number)
 end Column
 
 
@@ -60,7 +58,7 @@ class SubArea(puzzle: Puzzle,val sum:Int) extends Iterable[Square] with Area:
   
   var color:Some[Color]  = Some(Color.White)
 
-  var possibleColor : Vector[Color] = Vector(Color.LightCyan,Color.LightCoral,Color.Lavender,Color.OrangeRed)
+  var possibleColor : Vector[Color] = Vector(Color.SkyBlue,Color.OrangeRed,Color.DarkOliveGreen,Color.BlueViolet)
 
   def currentSum = squares.foldLeft(0)( (current ,next) => current + next.value)
   
@@ -80,7 +78,7 @@ class SubArea(puzzle: Puzzle,val sum:Int) extends Iterable[Square] with Area:
   def setColor(newColor:Color) =
     this.color = Some(newColor)
 
-  override def validate(number: Int): Boolean =  number < 10 && number > 0 && ( currentSum -number) > 0
+  override def validate(): Boolean =  this.currentSum < sum
   
 end SubArea
 

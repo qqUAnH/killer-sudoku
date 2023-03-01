@@ -34,6 +34,6 @@ object Game extends App {
     println( this.puzzle.allSubAreas().map(x=>x.squares.length).mkString(" "))
     println(""+ this.puzzle.allSquare().length)
 
-
+  def isWin() :Boolean = ???
 
 }

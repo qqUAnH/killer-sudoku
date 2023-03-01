@@ -30,10 +30,12 @@ import scalafx.scene.layout.RowConstraints
 import scalafx.scene.paint.Color.*
 import scalafx.scene.layout.*
 import scalafx.beans.property.*
+import scalafx.geometry.Pos
 import Game.Game
 import javafx.animation.AnimationTimer
 import javafx.event.ActionEvent
-import javafx.scene.input.{KeyEvent, MouseEvent}
+import javafx.scene.input.{KeyCode, KeyEvent, MouseEvent}
+import logic.{Puzzle, Square, SubArea}
 import scalafx.scene.layout.GridPane.{getColumnIndex, getRowIndex}
 import scalafx.scene.paint.Color
 import scalafx.application.Platform
@@ -56,16 +58,20 @@ object Main extends JFXApp3:
     readable code.
     */
     stage = new JFXApp3.PrimaryStage:
-      title = "SODOKU"
-      width = 500
-      height = 500
+      title     = "KILLER-SODOKU"
+      width     = stageWidth
+      height    = stageHeight
       resizable = false
     /*
     Create root gui component, add it to a Scene
     and set the current window scene.
     */
-    val root = GridPane()
+    val root       = StackPane()
+    val grid       = new GridPane()
+    val secondgrid = new GridPane()
     val scene = Scene( parent =root)
+    root.children.add(grid)
+    root.setAlignment(Pos.TopLeft)
 
 
     stage.scene = scene
@@ -74,42 +80,64 @@ object Main extends JFXApp3:
       fill=White
       x = 0
       y = 0
-      width = 50
-      height = 50
-      var i = 0
+      width = squareLength
+      height = squareLength
+
+
+    def createPath() = new Path:
+       this.elements.addAll(MoveTo(0,0),VLineTo(squareLength),HLineTo(squareLength),VLineTo(0),HLineTo(0))
+    end createPath
+
+    def createInterPath(subArea: SubArea) = new Polyline:
+      subArea.squares.map( square => Vector.tabulate(4)( x =>1))
+      val x: Vector[Vector[(Int,Int)]] = Vector()
+
+
+
+
+    end createInterPath
 
 
     def createStackPane(x:Int,y:Int) = new StackPane:
+
       this.focusTraversable = true
-      root.add(this,x,y)
+      grid.add(this,x,y)
 
-      val rect = rectangle()
-
-      val square = sodoku.square(x+y*9)
-      val numberProperty = StringProperty(""+square.value)
-      val number = Text(""+square.value)
-      val canvas = new Canvas(50,50)
+      //set up component in the pane
+      val rect           = rectangle()
+      val square         = sodoku.square(x+y*9)
+      val numberProperty = StringProperty("")
+      val number         = Text("")
+      val path           = createPath()
       number.textProperty().bind(numberProperty)
-
-
       rect.fill = if this.square.subArea.isDefined then this.square.subArea.get.color.get else White
 
-
+      //helper function and varible
       def stackchildren = this.children
-
-
       var i = 0
-      val path = new Path
-      path.elements += MoveTo(0,0)
-      path.elements += VLineTo(50)
-      path.elements += HLineTo(50)
-      path.elements += VLineTo(0)
-      path.elements += HLineTo(0)
-      path.elements += new ClosePath()
+
 
       this.onKeyPressed = (ke:KeyEvent) =>{
-        numberProperty.set(""+2)
-        println("A")
+        var helper = 10
+        ke.getCode match
+          case KeyCode.DIGIT1 => helper = 1
+          case KeyCode.DIGIT2 => helper = 2
+          case KeyCode.DIGIT3 => helper = 3
+          case KeyCode.DIGIT4 => helper = 4
+          case KeyCode.DIGIT5 => helper = 5
+          case KeyCode.DIGIT6 => helper = 6
+          case KeyCode.DIGIT7 => helper = 7
+          case KeyCode.DIGIT8 => helper = 8
+          case KeyCode.DIGIT9 => helper = 9
+          case KeyCode.DIGIT0 => helper = 0
+
+        //THis will be change later when we do command part
+        if helper == 0 then
+          square.setValue(0)
+          numberProperty.set("")
+        else if helper < 10 then
+          square.setValue(helper)
+          numberProperty.set(""+helper)
       }
       hover.onChange (
         (_,_,_) =>
@@ -118,32 +146,35 @@ object Main extends JFXApp3:
             i = 1
           else
             //THis neeed to change
+
             rect.fill.update(square.subArea.get.color.getOrElse(White))
             i = 0)
       this.onMouseClicked = (e:MouseEvent) => {
-        println( "aaa" +"")
         this.requestFocus()
       }
 
       this.children.addAll(rect,path,number)
+    end createStackPane
+
 
 
     def createColumnConstraints(): ColumnConstraints =
       new ColumnConstraints :
-        percentWidth = 10
+        percentWidth = comlumnPercentage
     def createRowConstraints() :RowConstraints =
       new RowConstraints :
-        percentHeight = 10
+        percentHeight = rowPercentage
+
+
+
+    grid.columnConstraints = Array.tabulate(9)(x=> createColumnConstraints())
+    grid.rowConstraints = Array.tabulate(9)(x => createRowConstraints())
 
     for {x <- 0 until 9
          y <- 0 until 9
          } do
       createStackPane(x,y)
 
-    root.columnConstraints = Array.tabulate(9)(x=> createColumnConstraints())
-    root.rowConstraints = Array.tabulate(9)(x => createRowConstraints())
-    val timer =  scalafx.animation.AnimationTimer( t=>{
-
-    })
-    timer.start()
+    secondgrid.columnConstraints = Array.tabulate(9)(x=> createColumnConstraints())
+    secondgrid.rowConstraints = Array.tabulate(9)(x => createRowConstraints())
 
