@@ -45,6 +45,11 @@ class Puzzle {
         area.setColor( area.possibleColor(0))
         subAreas.drop(index+1).foreach( area=> area.updatePossibleColor())
 
+  def isWin() :Boolean =
+    allSquare().map( x => x.value ).count( _ >0)  == 81
+      && allrows()   .forall( x=> x.validate())
+      && allcolumns().forall( x=> x.validate())
+
   def square(index:Int) = squares(index)
 
   def row   (index:Int) = rows(index)

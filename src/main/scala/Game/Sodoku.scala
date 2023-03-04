@@ -4,7 +4,8 @@ import logic.*
 import scala.collection.immutable
 import scala.collection.mutable.Buffer
 
-object Game extends App {
+object Sodoku extends App {
+  private val puzzle = Puzzle()
   def readfile() = Array.tabulate(81)(x => x+1)
   // this input have problem
   def readsubarea() = Buffer( Vector(5,1,2), Vector( 11,3,12) ,Vector(9,4,5),
@@ -18,10 +19,13 @@ object Game extends App {
     Vector(4,59,60),Vector(21,61,61+9,61+8),Vector(18,64,65,64+9,65+9),Vector(9,66,66+9),
     Vector(3,71,72),Vector(8,80,81),Vector(9,78,79)
   )
+  def getPuzzle = this.puzzle
 
-  val puzzle = Puzzle()
-  
-  this.puzzle.setUpPuzzle(readfile(),readsubarea())
+  def getSquare(index :Int) = this.puzzle.square(index)
+
+  //
+  def startNewGame() =
+    this.puzzle.setUpPuzzle(readfile(),readsubarea())
 
   println(this.puzzle.allcolumns().map( row => row.map(square => square.value).mkString(",")).mkString("\n"))
   if this.puzzle.allSquare().exists( _.subArea ==null ) then
@@ -33,7 +37,5 @@ object Game extends App {
     println( this.puzzle.allSubAreas().map(x=>x.neigbor.length).mkString(" "))
     println( this.puzzle.allSubAreas().map(x=>x.squares.length).mkString(" "))
     println(""+ this.puzzle.allSquare().length)
-
-  def isWin() :Boolean = ???
 
 }

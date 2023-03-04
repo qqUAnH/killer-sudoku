@@ -12,14 +12,15 @@ class Square(var value:Int,val position:Int ,val puzzle: Puzzle) {
     if number == 0 || this.possibleNumbers.contains(number) then
       value = number
 
-  def color =
+  def color:Color =
     if this.subArea.isDefined then
-      this.subArea.get.color.get.getHue
+      this.subArea.get.color.get
+    else Color.White
 
   // this function isn't finished
   def updatePossibleNumbers() =
     require( row.isDefined && column.isDefined && box.isDefined && subArea.isDefined)
-    this.possibleNumbers.filter( number => row.get.validate(number) && column.get.validate(number) && box.get.validate(number) && subArea.get.validate(number))
+    this.possibleNumbers.filter( number => row.get.validate() && column.get.validate() && box.get.validate() && subArea.get.validate())
 
   def neighbor(): Vector[Square] =
     val helper = position+1
@@ -27,5 +28,4 @@ class Square(var value:Int,val position:Int ,val puzzle: Puzzle) {
       .filter( index => index >= 0 && index < 81)
       .map( index => puzzle.square(index))
       .filter( square => square.row.get == this.row.get || square.column.get == this.column.get )
-
 }

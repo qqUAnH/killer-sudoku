@@ -26,7 +26,6 @@ class Row(puzzle: Puzzle,val position: Int) extends Iterable[Square] with Area:
   override def addSquare(square: Square): Unit =
     this.squares += square
     square.row = Some(this)
-
 end Row
 
 
@@ -36,7 +35,6 @@ class Box(puzzle: Puzzle, val position: Int) extends Iterable[Square] with Area:
   override def addSquare(square: Square): Unit =
     this.squares += square
     square.box = Some(this)
-
 end Box
 
 
@@ -77,9 +75,8 @@ class SubArea(puzzle: Puzzle,val sum:Int) extends Iterable[Square] with Area:
 
   def setColor(newColor:Color) =
     this.color = Some(newColor)
-
-  override def validate(): Boolean =  this.currentSum < sum
   
+  override def validate(): Boolean =  this.currentSum < sum
 end SubArea
 
 
