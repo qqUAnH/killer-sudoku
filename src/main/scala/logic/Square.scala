@@ -1,5 +1,10 @@
 package logic
+
+import scalafx.print.PrintColor
+import scalafx.scene.paint
 import scalafx.scene.paint.Color
+
+
 
 class Square(var value:Int,val position:Int ,val puzzle: Puzzle) {
   var possibleNumbers  = Vector.tabulate(9)(x=>x+1)
@@ -8,14 +13,19 @@ class Square(var value:Int,val position:Int ,val puzzle: Puzzle) {
   var box     : Option[Box] = None
   var subArea : Option[SubArea] = None
 
+  def isFirstSquare :Boolean =
+    subArea.map( area => area.squares.head).forall( _ == this )
+
   def setValue( number : Int) =
     if number == 0 || this.possibleNumbers.contains(number) then
       value = number
 
-  def color:Color =
+  def color: Color =
     if this.subArea.isDefined then
-      this.subArea.get.color.get
-    else Color.White
+      this.subArea.get.color.getOrElse(Color.White)
+    else
+      Color.White
+
 
   // this function isn't finished
   def updatePossibleNumbers() =

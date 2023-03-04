@@ -20,22 +20,11 @@ object Sodoku extends App {
     Vector(3,71,72),Vector(8,80,81),Vector(9,78,79)
   )
   def getPuzzle = this.puzzle
-
   def getSquare(index :Int) = this.puzzle.square(index)
 
   //
   def startNewGame() =
     this.puzzle.setUpPuzzle(readfile(),readsubarea())
-
-  println(this.puzzle.allcolumns().map( row => row.map(square => square.value).mkString(",")).mkString("\n"))
-  if this.puzzle.allSquare().exists( _.subArea ==null ) then
-    println( this.puzzle.allSquare().filter(_.subArea == null).map(_.position).mkString(" "))
-
-  else
-    println("yay")
-    println( this.puzzle.allSquare().map(x=>""+ x.neighbor().length ).mkString(" "))
-    println( this.puzzle.allSubAreas().map(x=>x.neigbor.length).mkString(" "))
-    println( this.puzzle.allSubAreas().map(x=>x.squares.length).mkString(" "))
-    println(""+ this.puzzle.allSquare().length)
+  startNewGame()
 
 }

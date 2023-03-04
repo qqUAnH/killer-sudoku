@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="root [file:/home/quan-hoang/Downloads/killer-sodoku3/]" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="root [file:/m/home/home4/49/hoangq1/unix/IdeaProjects/killer-sodoku/]" external.linked.project.path="/m/home/home4/49/hoangq1/unix/IdeaProjects/killer-sodoku" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_19">
-    <output url="file://$MODULE_DIR$/../../target/scala-3.2.2/classes" />
-    <output-test url="file://$MODULE_DIR$/../../target/scala-3.2.2/test-classes" />
+    <output url="file:///m/home/home4/49/hoangq1/unix/IdeaProjects/killer-sodoku/target/scala-3.2.2/classes" />
+    <output-test url="file:///m/home/home4/49/hoangq1/unix/IdeaProjects/killer-sodoku/target/scala-3.2.2/test-classes" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../..">
-      <sourceFolder url="file://$MODULE_DIR$/../../src/main/scala" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../src/test/scala" isTestSource="true" />
-      <excludeFolder url="file://$MODULE_DIR$/../../target" />
+    <content url="file:///m/home/home4/49/hoangq1/unix/IdeaProjects/killer-sodoku">
+      <sourceFolder url="file:///m/home/home4/49/hoangq1/unix/IdeaProjects/killer-sodoku/src/main/scala" isTestSource="false" />
+      <sourceFolder url="file:///m/home/home4/49/hoangq1/unix/IdeaProjects/killer-sodoku/src/test/scala" isTestSource="true" />
+      <excludeFolder url="file:///m/home/home4/49/hoangq1/unix/IdeaProjects/killer-sodoku/target" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="temurin-19" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sbt: io.circe:circe-core_3:0.14.3:jar" level="project" />
     <orderEntry type="library" name="sbt: io.circe:circe-generic_3:0.14.3:jar" level="project" />
@@ -54,14 +54,14 @@
       <library name="sbt: unmanaged-sources-and-docs">
         <CLASSES />
         <JAVADOC>
-          <root url="jar://$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-fxml/16/javafx-fxml-16-javadoc.jar!/" />
-          <root url="jar://$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-swing/16/javafx-swing-16-javadoc.jar!/" />
-          <root url="jar://$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-web/16/javafx-web-16-javadoc.jar!/" />
+          <root url="jar:///m/home/home4/49/hoangq1/unix/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-fxml/16/javafx-fxml-16-javadoc.jar!/" />
+          <root url="jar:///m/home/home4/49/hoangq1/unix/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-swing/16/javafx-swing-16-javadoc.jar!/" />
+          <root url="jar:///m/home/home4/49/hoangq1/unix/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-web/16/javafx-web-16-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-fxml/16/javafx-fxml-16-sources.jar!/" />
-          <root url="jar://$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-swing/16/javafx-swing-16-sources.jar!/" />
-          <root url="jar://$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-web/16/javafx-web-16-sources.jar!/" />
+          <root url="jar:///m/home/home4/49/hoangq1/unix/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-fxml/16/javafx-fxml-16-sources.jar!/" />
+          <root url="jar:///m/home/home4/49/hoangq1/unix/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-swing/16/javafx-swing-16-sources.jar!/" />
+          <root url="jar:///m/home/home4/49/hoangq1/unix/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-web/16/javafx-web-16-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>

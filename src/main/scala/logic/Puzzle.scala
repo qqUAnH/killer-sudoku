@@ -1,6 +1,7 @@
 package logic
 import scala.collection.mutable.Buffer
 import scalafx.scene.paint.Color
+import scala.util.Random
 
 class Puzzle {
   private val squares = Vector.tabulate(81)( x => Square(0,x,this))
@@ -23,27 +24,28 @@ class Puzzle {
       this.subAreas.append(newSubArea)
       rawData.drop(1).foreach( squareindex => newSubArea.addSquare(squares(squareindex-1)))
 
-    for i <- subAreas.indices do
-     coloring(i)
+    coloring(0)
 
     this.squares.zip(squareValue).foreach( (square :Square,number:Int) => square.setValue(number))
 
   def coloring( index :Int) :Unit =
     // can throw error here
     if index == 0 then
-      subAreas(index).setColor( subAreas(index).possibleColor(0))
+      subAreas(index).newColor()
       subAreas.drop(1).foreach(area => area.updatePossibleColor())
+      coloring(index+1)
     else if index < subAreas.length then
       val area         = subAreas(index)
       val previousArea = subAreas(index-1)
       if area.possibleColor.isEmpty then
-        // will this line need ? since all we already updated last time
-        previousArea.possibleColor =previousArea.possibleColor.filter(_ != previousArea.color.get)
-        previousArea.setColor(Color.White)
+        previousArea.possibleColor = previousArea.possibleColor.filter(_ != previousArea.color.get)
         coloring(index-1)
       else
-        area.setColor( area.possibleColor(0))
+        area.newColor()
         subAreas.drop(index+1).foreach( area=> area.updatePossibleColor())
+        coloring(index+1)
+
+
 
   def isWin() :Boolean =
     allSquare().map( x => x.value ).count( _ >0)  == 81

@@ -4,6 +4,7 @@ package logic
 import scala.collection.mutable.Buffer
 import scala.collection.Iterator
 import scalafx.scene.paint.Color
+import scala.util.Random
 
 trait Iterator[Square]:
   def hasNext:Boolean
@@ -54,9 +55,11 @@ class SubArea(puzzle: Puzzle,val sum:Int) extends Iterable[Square] with Area:
 
   val squares:Buffer[Square]= Buffer[Square]()
   
-  var color:Some[Color]  = Some(Color.White)
+  var color:Option[Color]  = None
 
-  var possibleColor : Vector[Color] = Vector(Color.SkyBlue,Color.OrangeRed,Color.DarkOliveGreen,Color.BlueViolet)
+  val colorPlate = Vector(Color.LightSkyBlue,Color.Coral,Color.SpringGreen,Color.PaleVioletRed)
+
+  var possibleColor : Vector[Color] = Vector(Color.LightSkyBlue,Color.Coral,Color.SpringGreen,Color.PaleVioletRed)
 
   def currentSum = squares.foldLeft(0)( (current ,next) => current + next.value)
   
@@ -71,10 +74,13 @@ class SubArea(puzzle: Puzzle,val sum:Int) extends Iterable[Square] with Area:
 
   def updatePossibleColor() =
     val usedColor =this.neigbor.filter( x=> x.color.isDefined).map( x => x.color.get)
-    this.possibleColor = this.possibleColor.filter( color=> !usedColor.contains(color))
+    this.possibleColor = this.colorPlate.filter( color => !usedColor.contains(color))
 
-  def setColor(newColor:Color) =
-    this.color = Some(newColor)
+  def newColor() =
+    val index  =Random.nextInt(possibleColor.length)
+    println(""+possibleColor.length+"   " +index +"   "+sum)
+    this.color = Some(possibleColor(index))
+
   
   override def validate(): Boolean =  this.currentSum < sum
 end SubArea
