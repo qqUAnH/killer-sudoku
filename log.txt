@@ -1,0 +1,77 @@
+6.3 interim report
+  Thus far , I have implemented  most of the logic of the program : ( there is one methods is missing which return
+  the number of possible combination in a subArea )
+    - Class quare : class square represent the smallest unit of a sodoku puzzle.
+      This class have 4 worth mentionning methods:
+        + color   : Which return the color of the subArea this Square belong to
+        + neighbor: Return all adjacent squre
+        + addArea : Which change add this square to its 4 areas : row ,column , box
+      THis class have a companion object which an apply method , which can be useful when dealing with
+      Json file
+
+    - Trait Area : this trait take a Vector of Square as parametter
+      The trait have 3 methods:
+        +usedDigits: a helper methods that return all used digit in the area based on the game rule
+        +validate  : Return a boolean value that tell  wheter the game rule is validated
+        +addSquares: this method will call the addArea of the square memember in the parametter which
+
+    - case Class row , collumn , box : all three extends from area , they will be useful when checking if
+     the game is over or not
+    - case Class subarea : The class is intened to be a case class since the square list is immutatble (thought
+     the value of memmber square  can change ) .ALso , this could be helpfull when trying to read and
+     parse date using circe.
+      this class have have flowing worth mentioning methods:
+       + newcolor() : Try a randomly choosen cloring in possible color
+       + upDatepossibleColor () : When this methods is call the the problem check all near by Area and
+        update possible color list
+       + neigbor() :Return all neigbor of this area
+       + override validate : check if this the current sum is greater than the intended sum
+       + MISSING methods : return all possilbe number of square in the area
+
+    - CLass puzzle : This class combine all the class above mention into one .It have serveral
+    auxiliary methods that would take long to discuss , so I only list two that I think you should know:
+      +coloring   :Backtracking coloring scheme
+      +setupPuzzle:Linked all instances of above mentioned class together
+
+  Now let talk about the GUI
+    My ideas is very simple I will link an instance of StackedSquare class to a Square instance
+    and grouped them into a gridPane: ( forgot to mention I use SCALAFX)
+      A StackedSquare is extened a stacked pane: and it have 4 component :
+        + A background square whose color is based on the subArea: THe color will be darken
+        when its parent ( the StackedSquare is hovered)
+        + A Number box : which reprent the value of the square.
+        + A boundary path : which outline the square
+        + A number on top left of the pane if the square this pane represent is the first one
+        of the subArea the square belong to.
+    The GUI is not finnished though , I still needed to implement a menubar , something to popup
+    when players win alo , St that repesent possible number acoording to game rule. Yet , I think
+    the structure of the GUI is fixed , and I only need to add new row and collums to the girdPane
+    and all is done. (THis should be simple , hopefully )
+
+
+  The GUI and will communicate via the Object Sodoku. Sodoku will do the stuff in the menu
+  (save, load ,..... :) , and as mentioned in the plane , the game will have undo and redo. Thus
+  the command pattern will be used . Sodoku will call command via an instance invoker class ( which
+  inclee a stack of case class SetValueCommand)
+
+  Another intention of my behind this design strat is to seperate the GUI and the game Logic .
+  However , I am not too sure whether I have done it right or not so I will appreaciate any
+  advice from you
+
+  I will try to write proper test in the next two weeks, and finish the project before the second
+  reports. I have physically testing them via GUI and println ,but  If you notice anything while
+  running the GUI , pls tell me .
+
+  ALso , about the testing plans , I have already have some ideas for the methods in logics  , but
+  for the GUI and  reading and parsing JSON , I have no ideas . If you have any advice pls tell me.
+
+  About the workload , I didn't really count but maybe 10-20 odds . I think I am a little ahead
+  of the official schedule .
+
+  P/s : WHile I don't believe in GPA ,for now I need them . So ,again, if you notice something wrong
+  or have some advice that could help me closer to a juicy 5 , tell me
+  BR
+  Quan , or call me Ramsey
+
+
+

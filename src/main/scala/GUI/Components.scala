@@ -60,9 +60,6 @@ class NumberBox( pane:StackedSquare) extends Text :
         this.textProperty().update("")
 
     this.update()
-
-
-
     pane.onKeyPressed = (ke:KeyEvent) => {
       ke.getCode match
         case KeyCode.DIGIT1     => Sodoku.setValue(pane,1)
@@ -79,7 +76,6 @@ class NumberBox( pane:StackedSquare) extends Text :
         case KeyCode.Y          => Sodoku.redo()
         case _                  => println("throw song")
       this.update()
-
     }
 
 

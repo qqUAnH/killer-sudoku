@@ -63,9 +63,7 @@ object Main extends JFXApp3:
     val scene = Scene( parent =root)
     root.children.add(grid)
     root.setAlignment(Pos.TopLeft)
-
     stage.scene = scene
-
 
     grid.columnConstraints = Array.tabulate(9)(x=> createColumnConstraints())
     grid.rowConstraints = Array.tabulate(9)(x => createRowConstraints())
