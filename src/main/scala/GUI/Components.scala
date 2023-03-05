@@ -1,8 +1,7 @@
 package GUI
 
-import Game.Sodoku
-import javafx.scene.input.{KeyCode, KeyEvent, MouseEvent}
-import logic.Puzzle
+import javafx.scene.input.{KeyCode, KeyCodeCombination, KeyCombination, KeyEvent, MouseEvent}
+import logic.{Puzzle, Sodoku, Square}
 import scalafx.scene.paint.Color
 import scalafx.beans.property.StringProperty
 import scalafx.scene.layout.{ColumnConstraints, GridPane, RowConstraints, StackPane}
@@ -12,9 +11,10 @@ import scalafx.scene.shape.{HLineTo, MoveTo, Path, Rectangle, VLineTo}
 import scalafx.scene.text.Text
 import scalafx.geometry.Pos
 import scalafx.Includes.*
+import logic.Sodoku
 
 
-
+// Create a reactangle which change color when its parent node is hovered
 def CreateRectangle( color:Color , pane: StackPane ) :shape.Rectangle =
   new shape.Rectangle() :
     pane.children.add(this)
@@ -27,14 +27,14 @@ def CreateRectangle( color:Color , pane: StackPane ) :shape.Rectangle =
     parent.value.hoverProperty.onChange((_, _, _) =>
       if i == 0 then
         i=1
-        fill.update(color.darker())
+        this.fill.update(color.darker())
       else
         i=0
-        fill.update(color))
+        this.fill.update(color))
 end CreateRectangle
 
 
-
+// Create a closed path which can be used to as a boundary of a node
 def createPath() = new Path:
   this.elements.addAll(MoveTo(0,0),VLineTo(squareLength),HLineTo(squareLength),VLineTo(0),HLineTo(0))
 end createPath
@@ -45,54 +45,64 @@ def createColumnConstraints(): ColumnConstraints =
     percentWidth = comlumnPercentage
 end createColumnConstraints
 
-
 def createRowConstraints() :RowConstraints =
   new RowConstraints :
     percentHeight = rowPercentage
 end createRowConstraints
 
+class NumberBox( pane:StackedSquare) extends Text :
+    val square = pane.square
+    pane.children.add(this)
+    def update():Unit=
+      if square.value < 10 && square.value > 0 then
+        this.textProperty().update(""+square.value)
+      else
+        this.textProperty().update("")
 
-def createStackPane(x:Int,y:Int, gridPane: GridPane) =
-  new StackPane:
+    this.update()
+
+
+
+    pane.onKeyPressed = (ke:KeyEvent) => {
+      ke.getCode match
+        case KeyCode.DIGIT1     => Sodoku.setValue(pane,1)
+        case KeyCode.DIGIT2     => Sodoku.setValue(pane,2)
+        case KeyCode.DIGIT3     => Sodoku.setValue(pane,3)
+        case KeyCode.DIGIT4     => Sodoku.setValue(pane,4)
+        case KeyCode.DIGIT5     => Sodoku.setValue(pane,5)
+        case KeyCode.DIGIT6     => Sodoku.setValue(pane,6)
+        case KeyCode.DIGIT7     => Sodoku.setValue(pane,7)
+        case KeyCode.DIGIT8     => Sodoku.setValue(pane,8)
+        case KeyCode.DIGIT9     => Sodoku.setValue(pane,9)
+        case KeyCode.BACK_SPACE => Sodoku.setValue(pane,0)
+        case KeyCode.Z          => Sodoku.undo()
+        case KeyCode.Y          => Sodoku.redo()
+        case _                  => println("throw song")
+      this.update()
+
+    }
+
+
+
+
+// create a StackPane that combine a square a path and a text box which represent Square's value
+class StackedSquare(x:Int,y:Int,val gridPane: GridPane) extends StackPane :
     this.focusTraversable = true
     gridPane.add(this,x,y)
     // create and add components to the pane
     val square         = Sodoku.getSquare(x+y*9)
     val rect           = CreateRectangle(square.color,this)
     val path           = createPath()
-    val numberProperty = StringProperty("")
-    val number         = Text("")
-    number.textProperty().bind(numberProperty)
-    this.children.addAll(path,number)
+    val text           = NumberBox(this)
+    this.children.addAll(path)
 
     if square.isFirstSquare && square.subArea.isDefined then
       val sumText = new Text(""+ square.subArea.get.sum)
       sumText.alignmentInParent = Pos.TopLeft
       this.children.add(sumText)
-    this.onKeyPressed = (ke:KeyEvent) =>{
-    var helper = 10
-    ke.getCode match
-      case KeyCode.DIGIT1     => helper = 1
-      case KeyCode.DIGIT2     => helper = 2
-      case KeyCode.DIGIT3     => helper = 3
-      case KeyCode.DIGIT4     => helper = 4
-      case KeyCode.DIGIT5     => helper = 5
-      case KeyCode.DIGIT6     => helper = 6
-      case KeyCode.DIGIT7     => helper = 7
-      case KeyCode.DIGIT8     => helper = 8
-      case KeyCode.DIGIT9     => helper = 9
-      case KeyCode.BACK_SPACE => helper = 0
-      case _              => helper = 10
 
-      if helper == 0 then
-        square.setValue(0)
-        numberProperty.set("")
-      else if helper < 10 then
-        square.setValue(helper)
-        numberProperty.set(""+helper) }
     this.onMouseClicked = (m:MouseEvent) => {
       this.requestFocus()
       m.consume()
     }
-
-end createStackPane
+end StackedSquare

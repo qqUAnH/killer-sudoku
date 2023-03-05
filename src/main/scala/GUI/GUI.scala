@@ -31,10 +31,9 @@ import scalafx.scene.paint.Color.*
 import scalafx.scene.layout.*
 import scalafx.beans.property.*
 import scalafx.geometry.Pos
-import Game.Sodoku
 import javafx.animation.AnimationTimer
 import javafx.scene.input.{KeyCode, KeyEvent, MouseEvent}
-import logic.{Puzzle, Square, SubArea}
+import logic.{Puzzle, Sodoku, Square, SubArea}
 import scalafx.scene.layout.GridPane.{getColumnIndex, getRowIndex}
 import scalafx.scene.paint.Color
 import scalafx.application.Platform
@@ -67,14 +66,6 @@ object Main extends JFXApp3:
 
     stage.scene = scene
 
-    def createColumnConstraints(): ColumnConstraints =
-      new ColumnConstraints :
-        percentWidth = comlumnPercentage
-    def createRowConstraints() :RowConstraints =
-      new RowConstraints :
-        percentHeight = rowPercentage
-
-
 
     grid.columnConstraints = Array.tabulate(9)(x=> createColumnConstraints())
     grid.rowConstraints = Array.tabulate(9)(x => createRowConstraints())
@@ -82,5 +73,5 @@ object Main extends JFXApp3:
     for {x <- 0 until 9
          y <- 0 until 9
          } do
-      createStackPane(x,y,grid)
+      new StackedSquare(x,y,grid)
 end Main

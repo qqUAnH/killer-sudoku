@@ -1,14 +1,16 @@
-package Game
-import logic.*
+package logic
+
+import GUI.StackedSquare
+import IO.JSON
 
 import scala.collection.immutable
 import scala.collection.mutable.Buffer
-import IO.JSON
 
 object Sodoku extends App {
+  private val invoker= Invoker()
   private var puzzle = Puzzle()
   def readfile() = Array.tabulate(81)(x => x+1)
-  // this input have problem
+  // dummie :V function
   def readsubarea() = Buffer( Vector(5,1,2), Vector( 11,3,12) ,Vector(9,4,5),
                               Vector(18,6,15,16),Vector(12,7,8,17),Vector(22,9,18,27,26),
                               Vector(15,10,19),Vector(6,11,20),Vector(10,21,22),
@@ -20,10 +22,18 @@ object Sodoku extends App {
     Vector(4,59,60),Vector(21,61,61+9,61+8),Vector(18,64,65,64+9,65+9),Vector(9,66,66+9),
     Vector(3,71,72),Vector(8,80,81),Vector(9,78,79)
   )
-
   def getPuzzle = this.puzzle
+
   def getSquare(index :Int) = this.puzzle.square(index)
 
+  def setValue(pane: StackedSquare, value:Int) =
+    invoker.setValue(pane,value)
+
+  def undo() =
+    invoker.undo()
+
+  def redo() =
+    invoker.redo()
   //
   def startNewGame() =
     this.puzzle.setUpPuzzle(readfile(),readsubarea())

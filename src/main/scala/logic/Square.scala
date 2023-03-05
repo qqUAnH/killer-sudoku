@@ -1,6 +1,5 @@
 package logic
 
-import Game.Sodoku
 import scalafx.print.PrintColor
 import scalafx.scene.paint
 import scalafx.scene.paint.Color
