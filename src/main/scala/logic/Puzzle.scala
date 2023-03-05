@@ -2,28 +2,26 @@ package logic
 import scala.collection.mutable.Buffer
 import scalafx.scene.paint.Color
 import scala.util.Random
+import scala.util.Try
 
 class Puzzle {
   private val squares = Vector.tabulate(81)( x => Square(0,x,this))
-  private val columns = Vector.tabulate(9) ( x => Column(this,x))
-  private val rows    = Vector.tabulate(9) ( x => Row   (this,x))
-  private val boxes   = Vector.tabulate(9) ( x => Box   (this,x))
+  private val columns = Vector.tabulate(9) ( x => Column(squares( Vector.tabulate(9)(i=> i*9+  x))        ,x))
+  private val rows    = Vector.tabulate(9) ( x => Row   (squares( Vector.tabulate(9)(i=> x*9 + i))        ,x))
+  private val boxes   = Vector.tabulate(9) ( x => Box   (squares( Vector.tabulate(9)(i =>x*3 + (i/3)*9+1)),x))
   private val subAreas : Buffer[SubArea] = Buffer()
 
   def setUpPuzzle(squareValue:Array[Int] , listOfSubArea:Buffer[Vector[Int]] ) =
     // Setup columns ,box and rows
-    for i <- 0 to 8 do
-      columns.foreach(column => column.addSquare( squares(i*9+ column.position)))
-      rows   .foreach(row    => row   .addSquare( squares(row.position*9 + i  )))
-      // ignore boxes for now
-      boxes  .foreach(box    => box   .addSquare( squares(box.position*3 + (i/3)*9+1)))
-
     for rawData <- listOfSubArea do
       /// COUld have an error here
-      val newSubArea = new SubArea(this,rawData.apply(0))
+      val newSubArea = new SubArea(squares(rawData.drop(1).map(_-1))  ,rawData.apply(0))
       this.subAreas.append(newSubArea)
-      rawData.drop(1).foreach( squareindex => newSubArea.addSquare(squares(squareindex-1)))
 
+    columns .foreach(_.addSquares())
+    rows    .foreach(_.addSquares())
+    subAreas.foreach(_.addSquares())
+    boxes   .foreach(_.addSquares())
     coloring(0)
 
     this.squares.zip(squareValue).foreach( (square :Square,number:Int) => square.setValue(number))
@@ -53,6 +51,9 @@ class Puzzle {
       && allcolumns().forall( x=> x.validate())
 
   def square(index:Int) = squares(index)
+
+  def squares( list : Vector[Int]) : Vector[Square] =
+    list.map( x => square(x) )
 
   def row   (index:Int) = rows(index)
 

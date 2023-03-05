@@ -1,12 +1,13 @@
 package logic
 
+import Game.Sodoku
 import scalafx.print.PrintColor
 import scalafx.scene.paint
 import scalafx.scene.paint.Color
 
 
 
-class Square(var value:Int,val position:Int ,val puzzle: Puzzle) {
+class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
   var possibleNumbers  = Vector.tabulate(9)(x=>x+1)
   var row     : Option[Row] = None
   var column  : Option[Column] = None
@@ -26,6 +27,12 @@ class Square(var value:Int,val position:Int ,val puzzle: Puzzle) {
     else
       Color.White
 
+  def addArea[B <: Area ]( area : B):Unit =
+    area match
+      case  a:SubArea => this.subArea = Some(a)
+      case  a:Row     => this.row     = Some(a)
+      case  a:Column  => this.column  = Some(a)
+      case  a:Box     => this.box     = Some(a)
 
   // this function isn't finished
   def updatePossibleNumbers() =
@@ -38,4 +45,8 @@ class Square(var value:Int,val position:Int ,val puzzle: Puzzle) {
       .filter( index => index >= 0 && index < 81)
       .map( index => puzzle.square(index))
       .filter( square => square.row.get == this.row.get || square.column.get == this.column.get )
+}
+object Square {
+  def apply( value:Int , position: Int ) :Square =
+    new Square(value , position, Sodoku.getPuzzle)
 }

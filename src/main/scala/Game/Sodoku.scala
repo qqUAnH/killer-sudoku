@@ -3,9 +3,10 @@ import logic.*
 
 import scala.collection.immutable
 import scala.collection.mutable.Buffer
+import IO.JSON
 
 object Sodoku extends App {
-  private val puzzle = Puzzle()
+  private var puzzle = Puzzle()
   def readfile() = Array.tabulate(81)(x => x+1)
   // this input have problem
   def readsubarea() = Buffer( Vector(5,1,2), Vector( 11,3,12) ,Vector(9,4,5),
@@ -19,6 +20,7 @@ object Sodoku extends App {
     Vector(4,59,60),Vector(21,61,61+9,61+8),Vector(18,64,65,64+9,65+9),Vector(9,66,66+9),
     Vector(3,71,72),Vector(8,80,81),Vector(9,78,79)
   )
+
   def getPuzzle = this.puzzle
   def getSquare(index :Int) = this.puzzle.square(index)
 
@@ -26,5 +28,13 @@ object Sodoku extends App {
   def startNewGame() =
     this.puzzle.setUpPuzzle(readfile(),readsubarea())
   startNewGame()
+
+  def save() = JSON.decode(this.getPuzzle.allSubAreas())
+
+  val x = this.puzzle.allSquare().filter( x=> x.row.isDefined && x.column.isDefined && x.subArea.isDefined ).length
+  @main def test =
+    println( "x= " +x)
+    println(save())
+
 
 }

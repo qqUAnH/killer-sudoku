@@ -12,49 +12,30 @@ trait Iterator[Square]:
   def next():Square
 end Iterator
 
-trait Area:
-  val squares:Buffer[Square]
-  def usedDigits: Buffer[Int] = squares.map( square => square.value).filter( _ != 0)
-  def addSquare(square:Square) :Unit
+trait Area( squares:Vector[Square]):
+  def usedDigits: Vector[Int] = squares.map( square => square.value).filter( _ != 0)
   def validate() =usedDigits.distinct.length == usedDigits.length
+  def addSquares() = this.squares.foreach( square => square.addArea(this))
 
 
-
-
-class Row(puzzle: Puzzle,val position: Int) extends Iterable[Square] with Area:
-  val squares:Buffer[Square]= Buffer[Square]()
+case class Row( squares:Vector[Square],position:Int) extends Iterable[Square] with Area(squares:Vector[Square]):
   def iterator = squares.iterator
-  override def addSquare(square: Square): Unit =
-    this.squares += square
-    square.row = Some(this)
 end Row
 
 
-class Box(puzzle: Puzzle, val position: Int) extends Iterable[Square] with Area:
-  val squares:Buffer[Square]= Buffer[Square]()
+case class Box( squares:Vector[Square],  position: Int) extends Iterable[Square] with Area(squares:Vector[Square]):
   def iterator = squares.iterator
-  override def addSquare(square: Square): Unit =
-    this.squares += square
-    square.box = Some(this)
 end Box
 
 
-class Column(puzzle: Puzzle, val position: Int) extends Iterable[Square]with Area:
-  val squares:Buffer[Square]= Buffer[Square]()
-
+case class Column(squares:Vector[Square], val position: Int) extends Iterable[Square]with Area(squares:Vector[Square]):
   def iterator = squares.iterator
-
-  override def addSquare(square: Square): Unit =
-    this.squares += square
-    square.column = Some(this)
 
 end Column
 
 
-class SubArea(puzzle: Puzzle,val sum:Int) extends Iterable[Square] with Area:
+case class SubArea( squares:Vector[Square],sum:Int ) extends Iterable[Square] with Area(squares:Vector[Square]):
 
-  val squares:Buffer[Square]= Buffer[Square]()
-  
   var color:Option[Color]  = None
 
   val colorPlate = Vector(Color.LightSkyBlue,Color.Coral,Color.SpringGreen,Color.PaleVioletRed)
@@ -65,9 +46,6 @@ class SubArea(puzzle: Puzzle,val sum:Int) extends Iterable[Square] with Area:
   
   def iterator = squares.iterator
 
-  override def addSquare(square: Square): Unit =
-    this.squares += square
-    square.subArea = Some(this)
 
   def neigbor: Vector[SubArea] =
     this.squares.flatMap( square => square.neighbor()).filter( square => square.subArea.get != this).map( square => square.subArea.get).distinct.toVector
@@ -81,7 +59,6 @@ class SubArea(puzzle: Puzzle,val sum:Int) extends Iterable[Square] with Area:
     println(""+possibleColor.length+"   " +index +"   "+sum)
     this.color = Some(possibleColor(index))
 
-  
   override def validate(): Boolean =  this.currentSum < sum
 end SubArea
 
