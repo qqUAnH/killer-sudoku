@@ -62,16 +62,20 @@
   reports. I have physically testing them via GUI and println ,but  If you notice anything while
   running the GUI , pls tell me .
 
-  ALso , about the testing plans , I have already have some ideas for the methods in logics  , but
-  for the GUI and  reading and parsing JSON , I have no ideas . If you have any advice pls tell me.
+  ALso , about the testing plans , I haven't implemented any proper test , but I have physically tested
+  all the feature I have implemented . I already have some ideas for the methods in logics ,and I will
+  implement them in the next two weeks .Yet ,concerning the GUI and  reading and parsing JSON , I have little ideas how to test them.
+  If you have any advice pls tell me.
 
   About the workload , I didn't really count but maybe 10-20 odds . I think I am a little ahead
   of the official schedule .
 
-  P/s : WHile I don't believe in GPA ,for now I need them . So ,again, if you notice something wrong
-  or have some advice that could help me closer to a juicy 5 , tell me
   BR
   Quan , or call me Ramsey
+Ps1: I think I can speed run this project before ,20/3. Is it possible to request not a proper "grading" by that time.
+That is , It is possible for me to get feedback based on what I have done based on the evaluation criteria
+
+
 
 
 
