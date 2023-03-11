@@ -37,8 +37,7 @@ end CreateRectangle
 
 // Create a closed path which can be used to as a boundary of a node
 def createPath() = new Path:
-  this.elements.addAll(MoveTo(1,1),VLineTo(squareLength-2),HLineTo(squareLength-2),VLineTo(1),HLineTo(1))
-  this.alignmentInParent = Pos.TopLeft
+  this.elements.addAll(MoveTo(0,0),VLineTo(squareLength),HLineTo(squareLength),VLineTo(0),HLineTo(0))
 end createPath
 
 
@@ -82,9 +81,9 @@ class StackedSquare(x:Int,y:Int,val gridPane: GridPane) extends StackPane :
     // create and add components to the pane
     val square         = Sodoku.getSquare(x+y*9)
     val rect           = CreateRectangle(square.color,this)
-
+    val path           = createPath()
     val text           = NumberBox(this)
-
+    this.children.add(path)
 
     if square.isFirstSquare && square.subArea.isDefined then
       val sumText = new Text(""+ square.subArea.get.sum)
@@ -100,12 +99,12 @@ end StackedSquare
 class BottomStackPane(x:Int) extends StackPane():
   val candidate = new Text(""+(x+1))
   this.alignment = Pos.Center
-  
+
   val rectangle = new Rectangle:
     width = squareLength
     height =squareLength
     fill =Gray
-  
+
   this.children.addAll(rectangle)
   this.children.add(candidate)
 

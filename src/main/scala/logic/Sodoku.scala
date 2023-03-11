@@ -48,5 +48,4 @@ object Sodoku extends App {
     println( "x= " +x)
     println(save())
 
-
 }

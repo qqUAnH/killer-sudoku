@@ -19,4 +19,6 @@ object JSON {
   def decode( subAreas: Buffer[SubArea] ) =
     subAreas.asJson.spaces2
 
+  
 }
+
