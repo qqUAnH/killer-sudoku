@@ -55,21 +55,33 @@ object Main extends JFXApp3:
       title     = "KILLER-SODOKU"
       width     = stageWidth
       height    = stageHeight
-      resizable = false
 
-    val root       = StackPane()
+    val root       = new StackPane()
     val grid       = new GridPane()
-    val secondgrid = new GridPane()
     val scene = Scene( parent =root)
-    root.children.add(grid)
+    root.children.addAll(grid)
     root.setAlignment(Pos.TopLeft)
+
+    var currentSquare:Option[Square] = None
+
     stage.scene = scene
 
-    grid.columnConstraints = Array.tabulate(9)(x=> createColumnConstraints())
-    grid.rowConstraints = Array.tabulate(9)(x => createRowConstraints())
+    grid.columnConstraints = Array.tabulate(9)(x=> ColumnConstraints(squareLength))
+    grid.rowConstraints = Array.tabulate(10)(x => RowConstraints(squareLength))
+    println(grid.getRowCount)
+
+
+
+    val bottombar = new GridPane()
+    grid.add(bottombar,0,9,9,1)
+    for x <- 0 until 9 do
+      bottombar.add(BottomStackPane(x) , x , 0)
 
     for {x <- 0 until 9
          y <- 0 until 9
          } do
       new StackedSquare(x,y,grid)
+
+
+
 end Main

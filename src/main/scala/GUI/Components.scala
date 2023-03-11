@@ -1,11 +1,12 @@
 package GUI
 
 import javafx.scene.input.{KeyCode, KeyCodeCombination, KeyCombination, KeyEvent, MouseEvent}
+import jdk.jfr.Label
 import logic.{Puzzle, Sodoku, Square}
 import scalafx.scene.paint.Color
 import scalafx.beans.property.StringProperty
 import scalafx.scene.layout.{ColumnConstraints, GridPane, RowConstraints, StackPane}
-import scalafx.scene.paint.Color.{Gray, White}
+import scalafx.scene.paint.Color.{Blue, Gray, White}
 import scalafx.scene.{Parent, shape}
 import scalafx.scene.shape.{HLineTo, MoveTo, Path, Rectangle, VLineTo}
 import scalafx.scene.text.Text
@@ -36,19 +37,12 @@ end CreateRectangle
 
 // Create a closed path which can be used to as a boundary of a node
 def createPath() = new Path:
-  this.elements.addAll(MoveTo(0,0),VLineTo(squareLength),HLineTo(squareLength),VLineTo(0),HLineTo(0))
+  this.elements.addAll(MoveTo(1,1),VLineTo(squareLength-2),HLineTo(squareLength-2),VLineTo(1),HLineTo(1))
+  this.alignmentInParent = Pos.TopLeft
 end createPath
 
 
-def createColumnConstraints(): ColumnConstraints =
-  new ColumnConstraints :
-    percentWidth = comlumnPercentage
-end createColumnConstraints
 
-def createRowConstraints() :RowConstraints =
-  new RowConstraints :
-    percentHeight = rowPercentage
-end createRowConstraints
 
 class NumberBox( pane:StackedSquare) extends Text :
     val square = pane.square
@@ -88,9 +82,9 @@ class StackedSquare(x:Int,y:Int,val gridPane: GridPane) extends StackPane :
     // create and add components to the pane
     val square         = Sodoku.getSquare(x+y*9)
     val rect           = CreateRectangle(square.color,this)
-    val path           = createPath()
+
     val text           = NumberBox(this)
-    this.children.addAll(path)
+
 
     if square.isFirstSquare && square.subArea.isDefined then
       val sumText = new Text(""+ square.subArea.get.sum)
@@ -102,3 +96,22 @@ class StackedSquare(x:Int,y:Int,val gridPane: GridPane) extends StackPane :
       m.consume()
     }
 end StackedSquare
+
+class BottomStackPane(x:Int) extends StackPane():
+  val candidate = new Text(""+(x+1))
+  this.alignment = Pos.Center
+  
+  val rectangle = new Rectangle:
+    width = squareLength
+    height =squareLength
+    fill =Gray
+  
+  this.children.addAll(rectangle)
+  this.children.add(candidate)
+
+
+
+
+
+
+

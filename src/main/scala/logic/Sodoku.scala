@@ -23,6 +23,8 @@ object Sodoku extends App {
     Vector(3,71,72),Vector(8,80,81),Vector(9,78,79)
   )
   def getPuzzle = this.puzzle
+  
+  
 
   def getSquare(index :Int) = this.puzzle.square(index)
 
