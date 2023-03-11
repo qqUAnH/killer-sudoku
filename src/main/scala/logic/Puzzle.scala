@@ -5,7 +5,7 @@ import scala.util.Random
 import scala.util.Try
 
 class Puzzle {
-  private val squares = Vector.tabulate(81)( x => Square(0,x,this))
+  private val squares = Vector.tabulate(81)( x => new Square(0,x,this))
   private val columns = Vector.tabulate(9) ( x => Column(squares( Vector.tabulate(9)(i=> i*9+  x))        ,x))
   private val rows    = Vector.tabulate(9) ( x => Row   (squares( Vector.tabulate(9)(i=> x*9 + i))        ,x))
   private val boxes   = Vector.tabulate(9) ( x => Box   (squares( Vector.tabulate(9)(i =>x*3 + (i/3)*9+1)),x))

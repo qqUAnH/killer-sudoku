@@ -8,6 +8,7 @@ import scalafx.scene.paint.Color
 
 class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
   var possibleNumbers  = Vector.tabulate(9)(x=>x+1)
+  val validNumber      =Vector.tabulate(9)(x=>x+1)
   var row     : Option[Row] = None
   var column  : Option[Column] = None
   var box     : Option[Box] = None
@@ -39,7 +40,7 @@ class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
   def updatePossibleNumbers() =
   // this methods throw error which mean we have read box yet
     require( row.isDefined && column.isDefined  && subArea.isDefined)
-    possibleNumbers= possibleNumbers.filter(number => !row.forall(_.usedDigits.contains(number)) && !column.forall(_.usedDigits.contains(number)))
+    possibleNumbers= validNumber.filter(number => !row.forall(_.usedDigits.contains(number)) && !column.forall(_.usedDigits.contains(number)))
 
 
   def neighbor(): Vector[Square] =

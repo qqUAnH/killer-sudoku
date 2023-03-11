@@ -8,10 +8,11 @@ import scalafx.beans.property.*
 import scalafx.scene.layout.{ColumnConstraints, GridPane, RowConstraints, StackPane}
 import scalafx.scene.paint.Color.{Black, Blue, Gray, Red, White}
 import scalafx.scene.{Parent, shape}
-import scalafx.scene.shape.{HLineTo, MoveTo, Path, Rectangle, VLineTo}
+import scalafx.scene.shape.{HLineTo, LineTo, MoveTo, Path, Rectangle, VLineTo,ClosePath}
 import scalafx.scene.text.Text
 import scalafx.geometry.Pos
 import scalafx.Includes.*
+import scalafx.scene.shape.Line
 import logic.Sodoku
 
 
@@ -36,10 +37,28 @@ end CreateRectangle
 
 
 // Create a closed path which can be used to as a boundary of a node
-def createPath() = new Path:
-  this.elements.addAll(MoveTo(0,0),VLineTo(squareLength),HLineTo(squareLength),VLineTo(0),HLineTo(0))
-end createPath
-
+def createDottedLine(pane:StackedSquare):Vector[Line]=
+  var result:Vector[Line] = Vector()
+  var square = pane.square
+  var index  = square.position
+  var neighboorSubArea = square.neighbor().filter(_.subArea.get == square.subArea.get).map(_.position)
+  if !neighboorSubArea.contains(index-1) then
+    val left =Line(0,0,0,50)
+    left.alignmentInParent = Pos.TopLeft
+    result =result :+ left
+  if !neighboorSubArea.contains(index+1) then
+    val right=Line(0,0,0,50)
+    right.alignmentInParent = Pos.TopRight
+    result =result :+ right
+  if !neighboorSubArea.contains(index+9) then
+    val bot = Line(0,0,50,0)
+    bot.alignmentInParent = Pos.BottomLeft
+    result =result :+ bot
+  if !neighboorSubArea.contains(index-9) then
+    val top = Line(0,0,50,0)
+    top.alignmentInParent = Pos.TopLeft
+    result =result :+ top
+  result
 
 
 
@@ -74,6 +93,8 @@ class NumberBox( pane:StackedSquare) extends Text :
 
 
 
+
+
 // create a StackPane that combine a square a path and a text box which represent Square's value
 class StackedSquare(x:Int,y:Int,val gridPane: GridPane,bottomBar:Array[BottomStackPane]) extends StackPane :
     this.focusTraversable = true
@@ -81,9 +102,16 @@ class StackedSquare(x:Int,y:Int,val gridPane: GridPane,bottomBar:Array[BottomSta
     // create and add components to the pane
     val square         = Sodoku.getSquare(x+y*9)
     val rect           = CreateRectangle(square.color,this)
-    val path           = createPath()
+    //val path           = createPath(this)
     val text           = NumberBox(this)
-    this.children.add(path)
+    //this.children.add(path)
+    val dot  =createDottedLine(this)
+    //this.children.add(dot)
+    dot.foreach(_.strokeWidth = 3)
+    dot.foreach(_.getStrokeDashArray().addAll(3d))
+    dot.foreach( this.children.add(_))
+
+
 
     if square.isFirstSquare && square.subArea.isDefined then
       val sumText = new Text(""+ square.subArea.get.sum)

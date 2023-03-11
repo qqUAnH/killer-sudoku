@@ -9,6 +9,7 @@ import scala.collection.mutable.Buffer
 object Sodoku extends App {
   private val invoker= Invoker()
   private var puzzle = Puzzle()
+  //some thing have changed
   def readfile() = Array.tabulate(81)(x => x+1)
   // dummie :V function
   def readsubarea() = Buffer( Vector(5,1,2), Vector( 11,3,12) ,Vector(9,4,5),
@@ -23,8 +24,8 @@ object Sodoku extends App {
     Vector(3,71,72),Vector(8,80,81),Vector(9,78,79)
   )
   def getPuzzle = this.puzzle
-  
-  
+
+
 
   def getSquare(index :Int) = this.puzzle.square(index)
 
