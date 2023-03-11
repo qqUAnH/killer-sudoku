@@ -56,31 +56,37 @@ object Main extends JFXApp3:
       width     = stageWidth
       height    = stageHeight
 
-    val root       = new StackPane()
-    val grid       = new GridPane()
-    val scene = Scene( parent =root)
-    root.children.addAll(grid)
-    root.setAlignment(Pos.TopLeft)
 
-    var currentSquare:Option[Square] = None
 
-    stage.scene = scene
 
-    grid.columnConstraints = Array.tabulate(9)(x=> ColumnConstraints(squareLength))
-    grid.rowConstraints = Array.tabulate(10)(x => RowConstraints(squareLength))
-    println(grid.getRowCount)
-
+    val root      = new StackPane()
 
 
     val bottombar = new GridPane()
-    grid.add(bottombar,0,9,9,1)
-    for x <- 0 until 9 do
-      bottombar.add(BottomStackPane(x) , x , 0)
+    val bottomPanes = Array.tabulate(9)( x =>new BottomStackPane(x))
+    for i <- 0 until bottomPanes.length do
+      bottombar.add(bottomPanes(i),i,0)
 
-    for {x <- 0 until 9
+
+    val grid      = new GridPane:
+      this.columnConstraints = Array.tabulate(9)(x=> ColumnConstraints(squareLength))
+      this.rowConstraints = Array.tabulate(10)(x => RowConstraints(squareLength))
+      this.add(bottombar,0,9,9,1)
+
+      for {x <- 0 until 9
          y <- 0 until 9
          } do
-      new StackedSquare(x,y,grid)
+      new StackedSquare(x,y,this,bottomPanes)
+
+    val scene = Scene( parent =root)
+
+
+    root.children.add(grid)
+    root.setAlignment(Pos.TopLeft)
+
+    stage.scene = scene
+
+
 
 
 

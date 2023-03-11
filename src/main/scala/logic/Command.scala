@@ -14,11 +14,13 @@ case class SetValueCommand(pane: StackedSquare, oldValue :Int, newValue :Int) ex
   def undo():Unit =
     pane.requestFocus()
     pane.square.setValue(oldValue)
+    // this is un safe11
     pane.text.update()
 
   def redo():Unit =
     pane.requestFocus()
     pane.square.setValue(newValue)
+    // this is unsafe
     pane.text.update()
 
   def execute():Unit =

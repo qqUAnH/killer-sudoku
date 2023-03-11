@@ -4,9 +4,9 @@ import javafx.scene.input.{KeyCode, KeyCodeCombination, KeyCombination, KeyEvent
 import jdk.jfr.Label
 import logic.{Puzzle, Sodoku, Square}
 import scalafx.scene.paint.Color
-import scalafx.beans.property.StringProperty
+import scalafx.beans.property.*
 import scalafx.scene.layout.{ColumnConstraints, GridPane, RowConstraints, StackPane}
-import scalafx.scene.paint.Color.{Blue, Gray, White}
+import scalafx.scene.paint.Color.{Black, Blue, Gray, Red, White}
 import scalafx.scene.{Parent, shape}
 import scalafx.scene.shape.{HLineTo, MoveTo, Path, Rectangle, VLineTo}
 import scalafx.scene.text.Text
@@ -75,7 +75,7 @@ class NumberBox( pane:StackedSquare) extends Text :
 
 
 // create a StackPane that combine a square a path and a text box which represent Square's value
-class StackedSquare(x:Int,y:Int,val gridPane: GridPane) extends StackPane :
+class StackedSquare(x:Int,y:Int,val gridPane: GridPane,bottomBar:Array[BottomStackPane]) extends StackPane :
     this.focusTraversable = true
     gridPane.add(this,x,y)
     // create and add components to the pane
@@ -91,13 +91,26 @@ class StackedSquare(x:Int,y:Int,val gridPane: GridPane) extends StackPane :
       this.children.add(sumText)
 
     this.onMouseClicked = (m:MouseEvent) => {
+      bottomBar.foreach(pane=> pane.updateColor(square.possibleNumbers.contains(pane.number)))
+      bottomBar.foreach(_.requestFocus())
       this.requestFocus()
       m.consume()
     }
 end StackedSquare
 
-class BottomStackPane(x:Int) extends StackPane():
-  val candidate = new Text(""+(x+1))
+class BottomStackPane( index:Int) extends StackPane():
+  val number     = index+1
+  val candidate = new Text(""+(number))
+  candidate.scaleX = 1.3
+  candidate.scaleY = 1.3
+
+  // change color of candidate :Text to Read if the candidate number is according to the game rule , black otherwise )
+  def updateColor(possible: Boolean): Unit =
+    if possible then
+      candidate.fill = Black
+    else
+      candidate.fill = White
+
   this.alignment = Pos.Center
 
   val rectangle = new Rectangle:

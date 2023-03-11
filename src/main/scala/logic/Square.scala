@@ -19,6 +19,8 @@ class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
   def setValue( number : Int) =
     if number == 0 || this.possibleNumbers.contains(number) then
       value = number
+      row.foreach(_.squares.foreach(_.updatePossibleNumbers()))
+      column.foreach(_.squares.foreach(_.updatePossibleNumbers()))
 
   def color: Color =
     if this.subArea.isDefined then
@@ -35,8 +37,10 @@ class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
 
   // this function isn't finished
   def updatePossibleNumbers() =
-    require( row.isDefined && column.isDefined && box.isDefined && subArea.isDefined)
-    this.possibleNumbers.filter( number => row.get.validate() && column.get.validate() && box.get.validate() && subArea.get.validate())
+  // this methods throw error which mean we have read box yet
+    require( row.isDefined && column.isDefined  && subArea.isDefined)
+    possibleNumbers= possibleNumbers.filter(number => !row.forall(_.usedDigits.contains(number)) && !column.forall(_.usedDigits.contains(number)))
+
 
   def neighbor(): Vector[Square] =
     val helper = position+1

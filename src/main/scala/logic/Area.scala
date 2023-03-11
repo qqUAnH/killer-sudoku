@@ -14,7 +14,7 @@ end Iterator
 
 trait Area( squares:Vector[Square]):
   def usedDigits: Vector[Int] = squares.map( square => square.value).filter( _ != 0)
-  def validate() =usedDigits.distinct.length == usedDigits.length
+  def validate()   = usedDigits.distinct.length == usedDigits.length
   def addSquares() = this.squares.foreach( square => square.addArea(this))
 
 
