@@ -6,9 +6,9 @@ import logic.{Puzzle, Sodoku, Square}
 import scalafx.scene.paint.Color
 import scalafx.beans.property.*
 import scalafx.scene.layout.{ColumnConstraints, GridPane, RowConstraints, StackPane}
-import scalafx.scene.paint.Color.{Black, Blue, Gray, Red, White}
+import scalafx.scene.paint.Color.{Black, Blue, Brown, Gray, Red, White}
 import scalafx.scene.{Parent, shape}
-import scalafx.scene.shape.{HLineTo, LineTo, MoveTo, Path, Rectangle, VLineTo,ClosePath}
+import scalafx.scene.shape.{ClosePath, HLineTo, LineTo, MoveTo, Path, Rectangle, VLineTo}
 import scalafx.scene.text.Text
 import scalafx.geometry.Pos
 import scalafx.Includes.*
@@ -42,22 +42,35 @@ def createDottedLine(pane:StackedSquare):Vector[Line]=
   var square = pane.square
   var index  = square.position
   var neighboorSubArea = square.neighbor().filter(_.subArea.get == square.subArea.get).map(_.position)
+  val bot = Line(0,0,squareLength,0)
+  bot.alignmentInParent = Pos.BottomLeft
+  result =result :+ bot
+
+  val left =Line(0,0,0,squareLength)
+  left.alignmentInParent = Pos.TopLeft
+  result =result :+ left
+
+  val right=Line(0,0,0,squareLength)
+  right.alignmentInParent = Pos.TopRight
+  result =result :+ right
+
+  val top = Line(0,0,squareLength,0)
+  top.alignmentInParent = Pos.TopLeft
+  result =result :+ top
+  result.foreach(_.visible = false)
   if !neighboorSubArea.contains(index-1) then
-    val left =Line(0,0,0,50)
-    left.alignmentInParent = Pos.TopLeft
-    result =result :+ left
+    left.visible = true
   if !neighboorSubArea.contains(index+1) then
-    val right=Line(0,0,0,50)
-    right.alignmentInParent = Pos.TopRight
-    result =result :+ right
+    right.visible = true
   if !neighboorSubArea.contains(index+9) then
-    val bot = Line(0,0,50,0)
-    bot.alignmentInParent = Pos.BottomLeft
-    result =result :+ bot
+    bot.visible = true
   if !neighboorSubArea.contains(index-9) then
-    val top = Line(0,0,50,0)
-    top.alignmentInParent = Pos.TopLeft
-    result =result :+ top
+    top.visible = true
+
+  result.foreach(_.strokeWidth = 5)
+  result.foreach(_.getStrokeDashArray().addAll(0.1,7))
+  result.foreach( pane.children.add(_))
+  result.foreach(_.stroke = Brown.darker.darker)
   result
 
 
@@ -70,7 +83,8 @@ class NumberBox( pane:StackedSquare) extends Text :
         this.textProperty().update(""+square.value)
       else
         this.textProperty().update("")
-
+    this.scaleX = 1.3
+    this.scaleY = 1.3
     this.update()
     pane.onKeyPressed = (ke:KeyEvent) => {
       ke.getCode match
@@ -91,7 +105,41 @@ class NumberBox( pane:StackedSquare) extends Text :
     }
 
 
+def createPath(pane: StackedSquare): Vector[Line] =
+  var result: Vector[Line] = Vector()
+  var square = pane.square
+  var rowindex = square.row.map(_.position)
+  var columnindex = square.column.map(_.position)
 
+  val left = Line(0, 0, 0, squareLength)
+  left.alignmentInParent = Pos.TopLeft
+  result = result :+ left
+
+  val right = Line(0, 0, 0, squareLength)
+  right.alignmentInParent = Pos.TopRight
+  result = result :+ right
+
+  val bot = Line(0, 0, squareLength, 0)
+  bot.alignmentInParent = Pos.BottomLeft
+  result = result :+ bot
+
+  val top = Line(0, 0, squareLength, 0)
+  top.alignmentInParent = Pos.TopLeft
+  result = result :+ top
+
+  result.foreach(_.strokeWidth = 1)
+  result.foreach(pane.children.add(_))
+  result.foreach(_.stroke = Black.brighter())
+
+  if rowindex.forall(_ % 3 == 0) then
+    top.strokeWidth = 3
+  if rowindex.forall(_ % 3 == 2) then
+    bot.strokeWidth = 3
+  if columnindex.forall(_ % 3 == 0) then
+    left.strokeWidth = 3
+  if columnindex.forall(_ % 3 == 2) then
+    right.strokeWidth = 3
+  result
 
 
 
@@ -102,14 +150,12 @@ class StackedSquare(x:Int,y:Int,val gridPane: GridPane,bottomBar:Array[BottomSta
     // create and add components to the pane
     val square         = Sodoku.getSquare(x+y*9)
     val rect           = CreateRectangle(square.color,this)
-    //val path           = createPath(this)
+
     val text           = NumberBox(this)
-    //this.children.add(path)
-    val dot  =createDottedLine(this)
-    //this.children.add(dot)
-    dot.foreach(_.strokeWidth = 3)
-    dot.foreach(_.getStrokeDashArray().addAll(3d))
-    dot.foreach( this.children.add(_))
+    val path           = createPath(this)
+    val dot             =createDottedLine(this)
+
+
 
 
 
