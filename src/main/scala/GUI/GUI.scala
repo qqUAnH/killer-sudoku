@@ -79,18 +79,12 @@ object Main extends JFXApp3:
       new StackedSquare(x,y,this,bottomPanes)
 
 
-
-    val dot = DottedPath.result
-    dot.foreach(_.alignmentInParent = Pos.Center)
     val scene=Scene(parent= root)
-
-    scene.content = dot.toList
 
 
     root.children.add(grid)
 
     root.setAlignment(Pos.TopLeft)
-    println(dot.map(_.startX.value))
 
     stage.scene = scene
 
