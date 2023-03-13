@@ -5,7 +5,7 @@ import scala.util.Random
 import scala.util.Try
 
 class Puzzle {
-  private val squares = Vector.tabulate(81)( x => new Square(0,x,this))
+  private var squares = Vector.tabulate(81)( x => new Square(0,x,this))
   private val columns = Vector.tabulate(9) ( x => Column(squares( Vector.tabulate(9)(i=> i*9+  x))        ,x))
   private val rows    = Vector.tabulate(9) ( x => Row   (squares( Vector.tabulate(9)(i=> x*9 + i))        ,x))
   private val boxes   = Vector.tabulate(9) ( x => Box   (squares( Vector.tabulate(9)(i =>x*3 + (i/3)*9+1)),x))
@@ -25,6 +25,22 @@ class Puzzle {
     coloring(0)
 
     this.squares.zip(squareValue).foreach( (square :Square,number:Int) => square.setValue(number))
+
+  def setUpPuzzle2( processedData :Vector[SubArea]) =
+    val squareValue = processedData.flatMap(_.squares).sortBy(_.position).map(_.value)
+    this.squares.zip(squareValue).foreach((square: Square, number: Int) => square.setValue(number))
+    columns.foreach(_.addSquares())
+    rows.foreach(_.addSquares())
+    subAreas.foreach(_.addSquares())
+    boxes.foreach(_.addSquares())
+
+
+    for i <- processedData do
+      val newSubArea = new SubArea(  squares(i.squares.map(_.position).toVector) , i.sum)
+      newSubArea.addSquares()
+      this.subAreas.append(newSubArea)
+
+    coloring(0)
 
   def coloring( index :Int) :Unit =
     // can throw error here

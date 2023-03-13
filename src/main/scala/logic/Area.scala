@@ -35,7 +35,6 @@ end Column
 
 
 case class SubArea( squares:Vector[Square],sum:Int ) extends Iterable[Square] with Area(squares:Vector[Square]):
-
   var color:Option[Color]  = None
 
   val colorPlate = Vector(Color.LightSkyBlue,Color.Coral,Color.SpringGreen,Color.PaleVioletRed)
@@ -61,6 +60,10 @@ case class SubArea( squares:Vector[Square],sum:Int ) extends Iterable[Square] wi
 
   override def validate(): Boolean =  this.currentSum < sum
 end SubArea
+
+object SubArea:
+  def apply(squares: Vector[Square] ,sum:Int):SubArea=
+    new SubArea(squares, sum)
 
 
 

@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/killer-sodoku3.killersodoku-QuanHoang.iml" filepath="$PROJECT_DIR$/.idea/modules/killer-sodoku3.killersodoku-QuanHoang.iml" />
+      <module fileurl="file:///m/home/home4/49/hoangq1/unix/IdeaProjects/killer-sodoku/.idea/modules/killersodoku-QuanHoang.iml" filepath="/m/home/home4/49/hoangq1/unix/IdeaProjects/killer-sodoku/.idea/modules/killersodoku-QuanHoang.iml" />
+      <module fileurl="file:///m/home/home4/49/hoangq1/unix/IdeaProjects/killer-sodoku/.idea/modules/killersodoku-QuanHoang-build.iml" filepath="/m/home/home4/49/hoangq1/unix/IdeaProjects/killer-sodoku/.idea/modules/killersodoku-QuanHoang-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/project.killersodoku-QuanHoang-build.iml" filepath="$PROJECT_DIR$/.idea/modules/project.killersodoku-QuanHoang-build.iml" />
     </modules>
   </component>

@@ -37,16 +37,19 @@ object Sodoku extends App {
 
   def redo() =
     invoker.redo()
-  //
-  def startNewGame() =
-    this.puzzle.setUpPuzzle(readfile(),readsubarea())
-  startNewGame()
+  def load(path:String) =
+    val data =IO.JSON.load(path)
+    this.puzzle.setUpPuzzle2(data)
 
-  def save() = JSON.decode(this.getPuzzle.allSubAreas())
+  load("/u/49/hoangq1/unix/IdeaProjects/killer-sodoku/src/main/scala/IO/savefile/savefile1.txt")
+
+  def save() = JSON.save(this.getPuzzle.allSubAreas())
+
 
   val x = this.puzzle.allSquare().filter( x=> x.row.isDefined && x.column.isDefined && x.subArea.isDefined ).length
   @main def test =
     println( "x= " +x)
-    println(save())
+    println(this.puzzle.allSquare().map(_.value))
+
 
 }

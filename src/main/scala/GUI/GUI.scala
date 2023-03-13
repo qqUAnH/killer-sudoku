@@ -33,7 +33,7 @@ import scalafx.beans.property.*
 import scalafx.geometry.Pos
 import javafx.animation.AnimationTimer
 import javafx.scene.input.{KeyCode, KeyEvent, MouseEvent}
-import logic.{Puzzle, Sodoku, Square, SubArea}
+import logic._
 import scalafx.scene.layout.GridPane.{getColumnIndex, getRowIndex}
 import scalafx.scene.paint.Color
 import scalafx.application.Platform
@@ -55,18 +55,12 @@ object Main extends JFXApp3:
       title     = "KILLER-SODOKU"
       width     = stageWidth
       height    = stageHeight
-
-
-
-
     val root      = new StackPane()
-
 
     val bottombar = new GridPane()
     val bottomPanes = Array.tabulate(9)( x =>new BottomStackPane(x))
     for i <- 0 until bottomPanes.length do
       bottombar.add(bottomPanes(i),i,0)
-
 
     val grid      = new GridPane:
       this.columnConstraints = Array.tabulate(9)(x=> ColumnConstraints(squareLength))
@@ -87,9 +81,5 @@ object Main extends JFXApp3:
     root.setAlignment(Pos.TopLeft)
 
     stage.scene = scene
-
-
-
-
 
 end Main
