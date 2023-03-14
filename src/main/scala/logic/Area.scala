@@ -30,14 +30,13 @@ end Box
 
 case class Column(squares:Vector[Square], val position: Int) extends Iterable[Square]with Area(squares:Vector[Square]):
   def iterator = squares.iterator
-
 end Column
 
 
 case class SubArea( squares:Vector[Square],sum:Int ) extends Iterable[Square] with Area(squares:Vector[Square]):
   var color:Option[Color]  = None
 
-  val colorPlate = Vector(Color.LightSkyBlue,Color.Coral,Color.SpringGreen,Color.PaleVioletRed)
+  val colorPlate = Vector(Color.LightSkyBlue,Color.Coral,Color.SpringGreen,Color.PaleVioletRed).map(_.brighter)
 
   var possibleColor : Vector[Color] = Vector(Color.LightSkyBlue,Color.Coral,Color.SpringGreen,Color.PaleVioletRed)
 

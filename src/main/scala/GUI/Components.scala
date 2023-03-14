@@ -68,7 +68,7 @@ def createDottedLine(pane:StackedSquare):Vector[Line]=
     top.visible = true
 
   result.foreach(_.strokeWidth = 5)
-  result.foreach(_.getStrokeDashArray().addAll(0.1,7))
+  result.foreach(_.getStrokeDashArray().addAll(0.01,7))
   result.foreach( pane.children.add(_))
   result.foreach(_.stroke = Brown.darker.darker)
   result
@@ -172,6 +172,8 @@ class StackedSquare(x:Int,y:Int,val gridPane: GridPane,bottomBar:Array[BottomSta
     }
 end StackedSquare
 
+
+
 class BottomStackPane( index:Int) extends StackPane():
   val number     = index+1
   val candidate = new Text(""+(number))
@@ -181,9 +183,9 @@ class BottomStackPane( index:Int) extends StackPane():
   // change color of candidate :Text to Read if the candidate number is according to the game rule , black otherwise )
   def updateColor(possible: Boolean): Unit =
     if possible then
-      candidate.fill = Black
-    else
       candidate.fill = White
+    else
+      candidate.fill = Black
 
   this.alignment = Pos.Center
 

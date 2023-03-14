@@ -24,7 +24,7 @@ object JSON {
   def save( subAreas: Buffer[SubArea]) =
     val result =subAreas.asJson.spaces2
     result
-    Some(new PrintWriter("/u/49/hoangq1/unix/IdeaProjects/killer-sodoku/src/main/scala/IO/savefile/savefile1.txt")).foreach { p =>
+    Some(new PrintWriter( "/home/quan-hoang/Downloads/killer-sodoku3/src/main/scala/IO/savefile/savefile1.txt")).foreach { p =>
     p.write(result);   p.close
   }
 // Try catch stuff
