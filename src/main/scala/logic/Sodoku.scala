@@ -41,7 +41,7 @@ object Sodoku extends App {
     val data =IO.JSON.load(path)
     this.puzzle.setUpPuzzle2(data)
 
-  load("/home/quan-hoang/Downloads/killer-sodoku3/src/main/scala/IO/savefile/savefile1.txt")
+  load("/m/home/home4/49/hoangq1/unix/IdeaProjects/killer-sodoku/src/main/scala/IO/savefile/savefile1.txt")
 
   def save() = JSON.save(this.getPuzzle.allSubAreas())
 
@@ -50,6 +50,7 @@ object Sodoku extends App {
   @main def test =
     println( "x= " +x)
     println(this.puzzle.allSquare().map(_.value))
+    
 
 
 }

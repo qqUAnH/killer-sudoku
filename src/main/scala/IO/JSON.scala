@@ -20,7 +20,6 @@ object JSON {
 
   implicitly[Encoder[SubArea]]
   implicitly[Decoder[SubArea]]
-
   def save( subAreas: Buffer[SubArea]) =
     val result =subAreas.asJson.spaces2
     result
@@ -38,8 +37,6 @@ object JSON {
       case Right(json) => {
         val allsubArea = json.asArray.get.map( x=> x.as[SubArea])
         allsubArea.map(_.getOrElse( null)).toVector
-    
-
     // sourse haven't be closed
       }
 

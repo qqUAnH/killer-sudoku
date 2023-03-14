@@ -18,10 +18,9 @@ class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
     subArea.map( area => area.squares.head).forall( _ == this )
 
   def setValue( number : Int) =
-    if number == 0 || this.possibleNumbers.contains(number) then
-      value = number
-      row.foreach(_.squares.foreach(_.updatePossibleNumbers()))
-      column.foreach(_.squares.foreach(_.updatePossibleNumbers()))
+    value = number
+    row.foreach(_.squares.foreach(_.updatePossibleNumbers()))
+    column.foreach(_.squares.foreach(_.updatePossibleNumbers()))
 
   def color: Color =
     if this.subArea.isDefined then
