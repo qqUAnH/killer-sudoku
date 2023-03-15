@@ -19,7 +19,6 @@ object JSON {
     "value"   -> square.value.asJson ,
     "position"-> square.position.asJson
   )
-
   implicit val squareDecoder : Decoder[Square] = Decoder.forProduct2("value","position")(Square.apply)
 
   implicitly[Encoder[SubArea]]
@@ -30,15 +29,12 @@ object JSON {
       os.write( saveFolder / "savefile3.txt",result)
     catch
       case _ => {
-        val file = new File(saveFolder.toString++"fail")
+        println("Invalid Input")
       }
-
-
 // Try catch stuff
   def list() =
-    os.list(os.pwd)
-
-
+    os.list(saveFolder).map(_.toString.split("/").last) 
+    
   def load(filename:String):Vector[SubArea]  =
     val data = os.read(saveFolder / filename)
     val parseResult: Either[ParsingFailure, Json] = parse(data)
@@ -47,7 +43,6 @@ object JSON {
       case Right(json) => {
         val allsubArea = json.asArray.get.map( x=> x.as[SubArea])
         allsubArea.map(_.getOrElse( null)).toVector
-    // sourse haven't be closed
       }
 }
 

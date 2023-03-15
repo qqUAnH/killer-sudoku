@@ -11,6 +11,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="sbt: com.lihaoyi:geny_3:1.0.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.lihaoyi:os-lib_3:0.9.1:jar" level="project" />
     <orderEntry type="library" name="sbt: io.circe:circe-core_3:0.14.3:jar" level="project" />
     <orderEntry type="library" name="sbt: io.circe:circe-generic_3:0.14.3:jar" level="project" />
     <orderEntry type="library" name="sbt: io.circe:circe-jawn_3:0.14.3:jar" level="project" />

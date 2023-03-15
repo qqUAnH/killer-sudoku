@@ -45,7 +45,6 @@ import scala.language.postfixOps
 object Main extends JFXApp3:
   //SHould some be used in this situation
 
-
   val sodoku=Sodoku.getPuzzle
   def start(): Unit =
     //NOte for references LOL
@@ -56,22 +55,10 @@ object Main extends JFXApp3:
       width     = stageWidth
       height    = stageHeight
     val root      = new VBox()
-    val bottombar = new GridPane()
-    val menuBar   = new GameMenu()
-
     val bottomPanes = Array.tabulate(9)( x =>new BottomStackPane(x))
-    for i <- 0 until bottomPanes.length do
-      bottombar.add(bottomPanes(i),i,0)
-
-    val grid      = new GridPane:
-      this.columnConstraints = Array.tabulate(9)(x=> ColumnConstraints(squareLength))
-      this.rowConstraints = Array.tabulate(10)(x => RowConstraints(squareLength))
-      this.add(bottombar,0,9,9,1)
-
-      for {x <- 0 until 9
-         y <- 0 until 9
-         } do
-      new StackedSquare(x,y,this,bottomPanes)
+    val grid  =  SodokuGrid(bottomPanes)
+    grid.update()
+    val menuBar =  Menu_Controller(grid)
 
     val scene=Scene(parent= root)
 
