@@ -26,19 +26,14 @@ object JSON {
   implicitly[Decoder[SubArea]]
   def save( subAreas: Buffer[SubArea]) =
     val result =subAreas.asJson.spaces2
-    result
-    Some(new PrintWriter( "/home/quan-hoang/Downloads/killer-sodoku3/src/main/scala/IO/savefile/savefile1.txt")).foreach { p =>
-    p.write(result);   p.close
-
     try
-      os.write( saveFolder / "savefile1.txt",result)
+      os.write( saveFolder / "savefile3.txt",result)
     catch
       case _ => {
         val file = new File(saveFolder.toString++"fail")
-
       }
 
-  }
+
 // Try catch stuff
   def list() =
     os.list(os.pwd)
@@ -54,14 +49,5 @@ object JSON {
         allsubArea.map(_.getOrElse( null)).toVector
     // sourse haven't be closed
       }
-
-
-
-
-
-
-
-
-  
 }
 

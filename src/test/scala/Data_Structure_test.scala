@@ -16,7 +16,6 @@ class LogicSpec extends AnyFlatSpec :
   val allSquares = Sodoku.getPuzzle.allSquare()
   val Digits  = Vector.tabulate(9)(x => x+1)
 
-  Sodoku.load("/m/home/home4/49/hoangq1/unix/IdeaProjects/killer-sodoku/src/main/scala/IO/savefile/savefile1.txt")
 
 
   // This series of test below will test if the function setupPuzzle works as intended
