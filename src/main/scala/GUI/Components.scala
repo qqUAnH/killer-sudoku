@@ -140,7 +140,7 @@ def createPath(pane: StackedSquare): Vector[Line] =
   if columnindex.forall(_ % 3 == 2) then
     right.strokeWidth = 3
   result
-
+end createPath
 
 
 // create a StackPane that combine a square a path and a text box which represent Square's value
@@ -150,15 +150,10 @@ class StackedSquare(x:Int,y:Int,val gridPane: GridPane,bottomBar:Array[BottomSta
     // create and add components to the pane
     val square         = Sodoku.getSquare(x+y*9)
     val rect           = CreateRectangle(square.color,this)
-
     val text           = NumberBox(this)
     val path           = createPath(this)
     val dot             =createDottedLine(this)
-
-
-
-
-
+    //ADD a small number at the left cornner of the pane that indicate of of the subArea
     if square.isFirstSquare && square.subArea.isDefined then
       val sumText = new Text(""+ square.subArea.get.sum)
       sumText.alignmentInParent = Pos.TopLeft
@@ -193,7 +188,6 @@ class BottomStackPane( index:Int) extends StackPane():
     width = squareLength
     height =squareLength
     fill =Gray
-
   this.children.addAll(rectangle)
   this.children.add(candidate)
 

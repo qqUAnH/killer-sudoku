@@ -33,7 +33,7 @@ import scalafx.beans.property.*
 import scalafx.geometry.Pos
 import javafx.animation.AnimationTimer
 import javafx.scene.input.{KeyCode, KeyEvent, MouseEvent}
-import logic._
+import logic.*
 import scalafx.scene.layout.GridPane.{getColumnIndex, getRowIndex}
 import scalafx.scene.paint.Color
 import scalafx.application.Platform
@@ -55,9 +55,10 @@ object Main extends JFXApp3:
       title     = "KILLER-SODOKU"
       width     = stageWidth
       height    = stageHeight
-    val root      = new StackPane()
-
+    val root      = new VBox()
     val bottombar = new GridPane()
+    val menuBar   = new GameMenu()
+
     val bottomPanes = Array.tabulate(9)( x =>new BottomStackPane(x))
     for i <- 0 until bottomPanes.length do
       bottombar.add(bottomPanes(i),i,0)
@@ -72,11 +73,9 @@ object Main extends JFXApp3:
          } do
       new StackedSquare(x,y,this,bottomPanes)
 
-
     val scene=Scene(parent= root)
 
-
-    root.children.add(grid)
+    root.children.addAll(menuBar,grid)
 
     root.setAlignment(Pos.TopLeft)
 

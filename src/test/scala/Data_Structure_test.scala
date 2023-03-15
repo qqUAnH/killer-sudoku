@@ -1,5 +1,4 @@
 
-import collection.mutable.Stack
 import org.scalatest.flatspec.AnyFlatSpec
 import logic.*
 import scalafx.scene.paint.Color.White
@@ -8,6 +7,7 @@ import scala.util.Random
 import scala.util.Random.nextInt
 
 
+//https://www.scalatest.org/user_guide/writing_your_first_test
 /**
  * The pupose of this tet is to check if the logic of programm work properly given a valid save file
  */

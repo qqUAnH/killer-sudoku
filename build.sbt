@@ -4,6 +4,9 @@ ThisBuild / scalaVersion := "3.2.2"
 
 //Add scalafx dependency
 
+// Is os lib necessary
+libraryDependencies += "com.lihaoyi" %% "os-lib" % "0.9.1"
+
 libraryDependencies += "org.scalafx" %% "scalafx" % "16.0.0-R24"
 lazy val osName = System.getProperty("os.name") match {
   case n if n.startsWith("Linux")   => "linux"
