@@ -1,6 +1,6 @@
 
 import org.scalatest.flatspec.AnyFlatSpec
-import logic.*
+import logic.{Square, *}
 import scalafx.scene.paint.Color.White
 
 import scala.util.Random
@@ -17,7 +17,7 @@ class LogicSpec extends AnyFlatSpec :
   val Digits  = Vector.tabulate(9)(x => x+1)
 
 
-
+  
   // This series of test below will test if the function setupPuzzle works as intended
   "Every square " should "be assigned to a box" in {
     assert( allSquares.forall(_.box.isDefined))

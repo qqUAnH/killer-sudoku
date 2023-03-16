@@ -6,7 +6,7 @@ import logic.{Puzzle, Sodoku, Square}
 import scalafx.scene.paint.Color
 import scalafx.beans.property.*
 import scalafx.scene.layout.{ColumnConstraints, GridPane, RowConstraints, StackPane}
-import scalafx.scene.paint.Color.{Black, Blue, Brown, Gray, Red, White}
+import scalafx.scene.paint.Color.{Black, Blue, Brown, Gray, Red, Wheat, White, Yellow}
 import scalafx.scene.{Parent, shape}
 import scalafx.scene.shape.{ClosePath, HLineTo, LineTo, MoveTo, Path, Rectangle, VLineTo}
 import scalafx.scene.text.Text
@@ -23,19 +23,26 @@ class StackedSquare(x:Int,y:Int,val gridPane: GridPane,bottomBar:Array[BottomSta
     // create and add components to the pane
     val square         = Sodoku.getSquare(x+y*9)
     val rect           = CreateRectangle(square.color,this)
-    val text           = NumberBox(this)
+    val numberBox      = NumberBox(this)
     val path           = createPath(this)
     val dot            = createDottedLine(this)
+    val possibleComb   = PossibleComb(this)
+    
     //ADD a small number at the left cornner of the pane that indicate of of the subArea
     if square.isFirstSquare && square.subArea.isDefined then
       val sumText = new Text(""+ square.subArea.get.sum)
       sumText.alignmentInParent = Pos.TopLeft
+      sumText.fill = Red
+      sumText.scaleY = 1.05
+      sumText.scaleX = 1.05
       this.children.add(sumText)
 
     this.onMouseClicked = (m:MouseEvent) => {
       bottomBar.foreach(pane=> pane.updateColor(square.possibleNumbers.contains(pane.number)))
       bottomBar.foreach(_.requestFocus())
       this.requestFocus()
+      possibleComb.visible = true
+      numberBox.visible    = false
       m.consume()
     }
 end StackedSquare

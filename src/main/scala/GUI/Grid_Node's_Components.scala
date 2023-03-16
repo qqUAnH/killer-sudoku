@@ -101,6 +101,9 @@ class NumberBox( pane:StackedSquare) extends Text :
         case KeyCode.Z          => Sodoku.undo()
         case KeyCode.Y          => Sodoku.redo()
         case _                  => println("throw song")
+      this.visible = true
+      pane.possibleComb.visible = false
+      pane.possibleComb.update()
       this.update()
     }
 
@@ -141,5 +144,19 @@ def createPath(pane: StackedSquare): Vector[Line] =
     right.strokeWidth = 3
   result
 end createPath
+
+class PossibleComb(pane:StackedSquare) extends Text:
+  this.setText("")
+  val numberBox =pane.numberBox
+  pane.children.add(this)
+  def update()=
+    val value =pane.square.subArea.map( x=>x.numberOfPossibleCombination(x.numberOfEmptySquares,x.alphabet,x.currentSum))
+    if value.isDefined then
+      this.setText(""+value.get)
+  this.update()
+  this.visible = false
+
+
+
 
 

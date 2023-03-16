@@ -15,18 +15,18 @@ case class SetValueCommand(pane: StackedSquare, oldValue :Int, newValue :Int) ex
     pane.requestFocus()
     pane.square.setValue(oldValue)
     // this is un safe11
-    pane.text.update()
+    pane.numberBox.update()
 
   def redo():Unit =
     pane.requestFocus()
     pane.square.setValue(newValue)
     // this is unsafe
-    pane.text.update()
+    pane.numberBox.update()
 
   def execute():Unit =
     pane.requestFocus()
     pane.square.setValue(newValue)
-    pane.text.update()
+    pane.numberBox.update()
 
 
 object SetValueCommandStack:

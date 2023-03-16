@@ -2,11 +2,11 @@
   {
     "squares" : [
       {
-        "value" : 1,
+        "value" : 0,
         "position" : 0
       },
       {
-        "value" : 2,
+        "value" : 0,
         "position" : 1
       }
     ],
@@ -15,7 +15,7 @@
   {
     "squares" : [
       {
-        "value" : 3,
+        "value" : 0,
         "position" : 2
       },
       {
@@ -28,11 +28,11 @@
   {
     "squares" : [
       {
-        "value" : 4,
+        "value" : 0,
         "position" : 3
       },
       {
-        "value" : 5,
+        "value" : 0,
         "position" : 4
       }
     ],
@@ -178,7 +178,7 @@
   {
     "squares" : [
       {
-        "value" : 0,
+        "value" : 1,
         "position" : 28
       },
       {
@@ -247,7 +247,7 @@
         "position" : 38
       },
       {
-        "value" : 0,
+        "value" : 3,
         "position" : 39
       }
     ],
@@ -294,7 +294,7 @@
         "position" : 43
       },
       {
-        "value" : 0,
+        "value" : 4,
         "position" : 52
       }
     ],
@@ -363,7 +363,7 @@
   {
     "squares" : [
       {
-        "value" : 0,
+        "value" : 6,
         "position" : 57
       },
       {
@@ -371,11 +371,11 @@
         "position" : 66
       },
       {
-        "value" : 0,
+        "value" : 4,
         "position" : 75
       },
       {
-        "value" : 0,
+        "value" : 7,
         "position" : 67
       },
       {
@@ -405,7 +405,7 @@
         "position" : 60
       },
       {
-        "value" : 0,
+        "value" : 7,
         "position" : 69
       },
       {
@@ -422,7 +422,7 @@
         "position" : 63
       },
       {
-        "value" : 0,
+        "value" : 4,
         "position" : 64
       },
       {
@@ -452,7 +452,7 @@
   {
     "squares" : [
       {
-        "value" : 0,
+        "value" : 5,
         "position" : 70
       },
       {
@@ -469,7 +469,7 @@
         "position" : 79
       },
       {
-        "value" : 0,
+        "value" : 1,
         "position" : 80
       }
     ],
@@ -478,7 +478,7 @@
   {
     "squares" : [
       {
-        "value" : 0,
+        "value" : 1,
         "position" : 77
       },
       {

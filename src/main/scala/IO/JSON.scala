@@ -29,22 +29,26 @@ object JSON {
       os.write.over( path ,result)
     catch
       case _ => {
-        //
         println("Invalid Input")
       }
 // Try catch stuff
   def list() =
     os.list(saveFolder).map(_.toString.split("/").last) 
     
-  def load(path: Path):Vector[SubArea]  =
-    val data = os.read(path)
-    val parseResult: Either[ParsingFailure, Json] = parse(data)
-    parseResult match
-      case Left(parsefail) => throw IOException("msg")
-      case Right(json) => {
+  def load(path: Path):Option[Vector[SubArea]] =
+    try
+      val data = os.read(path)
+      val parseResult: Either[ParsingFailure, Json] = parse(data)
+      val result =parseResult match
+        case Left(parsefail) => throw IOException("msg")
+        case Right(json) => {
         val allsubArea = json.asArray.get.map( x=> x.as[SubArea])
         allsubArea.map(_.getOrElse( null)).toVector
-
       }
+      Some(result)
+    catch
+      case e:NullPointerException => None
+      case _                      => None
+      
 }
 

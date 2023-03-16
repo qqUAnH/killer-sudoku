@@ -1,46 +1,52 @@
 package logic
 import scala.collection.mutable.Buffer
 import scalafx.scene.paint.Color
+
 import scala.util.Random
 import scala.util.Try
 
 class Puzzle {
-  private var squares = Vector.tabulate(81)( x => new Square(0,x,this))
-  private val columns = Vector.tabulate(9) ( x => Column(squares( Vector.tabulate(9)(i=> i*9+  x))        ,x))
-  private val rows    = Vector.tabulate(9) ( x => Row   (squares( Vector.tabulate(9)(i=> x*9 + i))        ,x))
-  private val boxes   = Vector.tabulate(9) ( x => Box   (squares( Vector.tabulate(9)(i =>x*3 + (i/3)*9+1)),x))
-  private val subAreas : Buffer[SubArea] = Buffer()
+  private var squares :Vector[Square]   = Vector.tabulate(81)(x => new Square(0, x,this))
+  private val columns :Vector[Column]   = Vector.tabulate(9) ( x => Column(squares( Vector.tabulate(9)(i=> i*9+  x))        ,x))
+  private val rows    :Vector[Row]      = Vector.tabulate(9)(x => Row(squares(Vector.tabulate(9)(i => x * 9 + i)), x))
+  private var boxes   :Vector[Box]      = Vector()
+  private val subAreas: Buffer[SubArea] = Buffer()
 
-  def setUpPuzzle(squareValue:Array[Int] , listOfSubArea:Buffer[Vector[Int]] ) =
-    // Setup columns ,box and rows
-    for rawData <- listOfSubArea do
-      /// COUld have an error here
-      val newSubArea = new SubArea(squares(rawData.drop(1).map(_-1))  ,rawData.apply(0))
-      this.subAreas.append(newSubArea)
+  // add square to row this is a little bit trickier
+  for
+    rowGroup <- 0 until 3
+  do
+    val Rows = Vector.tabulate(3)( x => row(rowGroup*3 +x).squares.grouped(3).toVector)
+    for  y <-0 until 3 do
+      val boxSquare:Vector[Square] = Rows.flatMap( _.apply(y))
+      println( boxSquare.length)
+      boxes = boxes :+ Box( boxSquare, rowGroup*3 +y)
 
-    columns .foreach(_.addSquares())
-    rows    .foreach(_.addSquares())
-    subAreas.foreach(_.addSquares())
-    boxes   .foreach(_.addSquares())
-    coloring(0)
 
-    this.squares.zip(squareValue).foreach( (square :Square,number:Int) => square.setValue(number))
+
+
 
   def setUpPuzzle2( processedData :Vector[SubArea]) =
-    val squareValue = processedData.flatMap(_.squares).sortBy(_.position).map(_.value)
-    this.squares.zip(squareValue).foreach((square: Square, number: Int) => square.setValue(number))
-    columns.foreach(_.addSquares())
-    rows.foreach(_.addSquares())
-    subAreas.foreach(_.addSquares())
-    boxes.foreach(_.addSquares())
+    try
+      val squareValue = processedData.flatMap(_.squares).sortBy(_.position).map(_.value)
+      this.squares.zip(squareValue).foreach((square: Square, number: Int) => square.setValue(number))
+      columns.foreach(_.addSquares())
+      rows.foreach(_.addSquares())
+      subAreas.foreach(_.addSquares())
+      boxes.foreach(_.addSquares())
 
-
-    for i <- processedData do
-      val newSubArea = new SubArea(  squares(i.squares.map(_.position).toVector) , i.sum)
-      newSubArea.addSquares()
-      this.subAreas.append(newSubArea)
-
-    coloring(0)
+      for i <- processedData do
+        val newSubArea = new SubArea(  squares(i.squares.map(_.position).toVector) , i.sum)
+        newSubArea.addSquares()
+        this.subAreas.append(newSubArea)
+      coloring(0)
+      if !squares.forall(_.isValid) then
+        throw Exception("corrupted data")
+      else
+        println("Sucess")
+    catch
+      case _ => println("corrupted data")
+  end setUpPuzzle2
 
   def coloring( index :Int) :Unit =
     // can throw error here

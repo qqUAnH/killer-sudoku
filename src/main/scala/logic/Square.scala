@@ -13,7 +13,10 @@ class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
   var column  : Option[Column] = None
   var box     : Option[Box] = None
   var subArea : Option[SubArea] = None
-
+  
+  def isValid: Boolean =
+    row.isDefined && column.isDefined && box.isDefined && subArea.isDefined && (color != Color.White)
+  
   def isFirstSquare :Boolean =
     subArea.map( area => area.squares.head).forall( _ == this )
 
