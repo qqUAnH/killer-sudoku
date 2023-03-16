@@ -58,7 +58,7 @@ object Main extends JFXApp3:
     val bottomPanes = Array.tabulate(9)( x =>new BottomStackPane(x))
     val grid  =  SodokuGrid(bottomPanes)
     grid.update()
-    val menuBar =  Menu_Controller(grid)
+    val menuBar =  Menu_Controller(grid,stage)
 
     val scene=Scene(parent= root)
 

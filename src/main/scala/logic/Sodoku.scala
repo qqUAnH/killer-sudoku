@@ -5,6 +5,7 @@ import IO.JSON
 
 import scala.collection.immutable
 import scala.collection.mutable.Buffer
+import os.Path
 
 object Sodoku extends App {
   private val invoker= Invoker()
@@ -37,18 +38,18 @@ object Sodoku extends App {
 
   def redo() =
     invoker.redo()
-  def load(path:String) =
-    val data =IO.JSON.load(path)
+  def load(path:Path) =
+    val data = IO.JSON.load(path)
     this.puzzle.setUpPuzzle2(data)
 
-  load("savefile1.txt")
+  load(JSON.saveFolder / "savefile1.txt")
 
-  def save() = JSON.save(this.getPuzzle.allSubAreas())
+  def save( path: Path) = JSON.save(this.getPuzzle.allSubAreas(),path)
 
 
   val x = this.puzzle.allSquare().filter( x=> x.row.isDefined && x.column.isDefined && x.subArea.isDefined ).length
   @main def test =
-    this.save()
+
     println(JSON.list())
     
 

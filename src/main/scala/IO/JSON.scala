@@ -9,6 +9,7 @@ import java.io.IOException
 import java.io._
 import os.write
 import os.read
+import os.Path
 
 
 //  https://stackoverflow.com/questions/17521364/scala-writing-json-object-to-file-and-reading-it
@@ -20,13 +21,12 @@ object JSON {
     "position"-> square.position.asJson
   )
   implicit val squareDecoder : Decoder[Square] = Decoder.forProduct2("value","position")(Square.apply)
-
   implicitly[Encoder[SubArea]]
   implicitly[Decoder[SubArea]]
-  def save( subAreas: Buffer[SubArea]) =
-    val result =subAreas.asJson.spaces2
+  def save( subAreas: Buffer[SubArea],path:Path) =
     try
-      os.write( saveFolder / "savefile3.txt",result)
+      val result =subAreas.asJson.spaces2
+      os.write.over( path ,result)
     catch
       case _ => {
         println("Invalid Input")
@@ -35,14 +35,15 @@ object JSON {
   def list() =
     os.list(saveFolder).map(_.toString.split("/").last) 
     
-  def load(filename:String):Vector[SubArea]  =
-    val data = os.read(saveFolder / filename)
+  def load(path: Path):Vector[SubArea]  =
+    val data = os.read(path)
     val parseResult: Either[ParsingFailure, Json] = parse(data)
     parseResult match
       case Left(parsefail) => throw IOException("msg")
       case Right(json) => {
         val allsubArea = json.asArray.get.map( x=> x.as[SubArea])
         allsubArea.map(_.getOrElse( null)).toVector
+
       }
 }
 
