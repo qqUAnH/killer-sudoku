@@ -42,12 +42,9 @@ case class SubArea( squares:Vector[Square],sum:Int ) extends Iterable[Square] wi
 
   var possibleColor : Vector[Color] = Vector(Color.LightSkyBlue,Color.Coral,Color.SpringGreen,Color.PaleVioletRed)
 
-  def currentSum :Int = squares.foldLeft(0)( (current ,next) => current + next.value)
+  def currentSum :Int = sum - squares.foldLeft(0)( (current ,next) => current + next.value)
 
-  def numberOfEmptySquares :Int = squares.filter( _.value ==0 ).length
-
-
-  
+  def numberOfEmptySquares :Int = squares.count( _.value ==0)
   def iterator = squares.iterator
 
 
@@ -60,7 +57,6 @@ case class SubArea( squares:Vector[Square],sum:Int ) extends Iterable[Square] wi
 
   def newColor() =
     val index  =Random.nextInt(possibleColor.length)
-    println(""+possibleColor.length+"   " +index +"   "+sum)
     this.color = Some(possibleColor(index))
 
   def numberOfPossibleCombination( numberOfSquares:Int,alphabet:Vector[Int],sum:Int):Int =
@@ -68,15 +64,13 @@ case class SubArea( squares:Vector[Square],sum:Int ) extends Iterable[Square] wi
       0
     else if numberOfSquares == 1 then
       if alphabet.contains(sum) then 1 else 0
-    else if alphabet.length > 1 then
-      numberOfPossibleCombination( numberOfSquares ,alphabet.drop(1),sum)
-        + numberOfPossibleCombination(numberOfSquares-1 ,alphabet.drop(1) , sum -alphabet(0))
-        + numberOfPossibleCombination(numberOfSquares-1 ,alphabet , sum -alphabet(0))
+    else if alphabet.length  < numberOfSquares then
+      0
     else
-      numberOfPossibleCombination(numberOfSquares-1 ,alphabet , sum -alphabet(0))
-
-
-  override def validate(): Boolean =  this.currentSum < sum
+      numberOfPossibleCombination(numberOfSquares, alphabet.drop(1), sum)
+        + numberOfPossibleCombination(numberOfSquares - 1, alphabet.drop(1), sum - alphabet(0))
+  override def validate(): Boolean =
+    this.currentSum <= sum && this.usedDigits.distinct.length == this.usedDigits.length
 end SubArea
 
 object SubArea:

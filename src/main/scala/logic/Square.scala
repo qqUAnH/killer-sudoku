@@ -8,7 +8,7 @@ import scalafx.scene.paint.Color
 
 class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
   var possibleNumbers  = Vector.tabulate(9)(x=>x+1)
-  val validNumber      =Vector.tabulate(9)(x=>x+1)
+  val validNumber      = Vector.tabulate(9)(x=>x+1)
   var row     : Option[Row] = None
   var column  : Option[Column] = None
   var box     : Option[Box] = None
@@ -24,6 +24,7 @@ class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
     value = number
     row.foreach(_.squares.foreach(_.updatePossibleNumbers()))
     column.foreach(_.squares.foreach(_.updatePossibleNumbers()))
+    box.foreach(_.squares.foreach(_.updatePossibleNumbers()))
 
   def color: Color =
     if this.subArea.isDefined then
@@ -41,8 +42,11 @@ class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
   // this function isn't finished
   def updatePossibleNumbers() =
   // this methods throw error which mean we have read box yet
-    require( row.isDefined && column.isDefined  && subArea.isDefined)
-    possibleNumbers= validNumber.filter(number => !row.forall(_.usedDigits.contains(number)) && !column.forall(_.usedDigits.contains(number)))
+    require( row.isDefined && column.isDefined  && subArea.isDefined && box.isDefined)
+    possibleNumbers= validNumber.filter(number => 
+      !row.forall(_.usedDigits.contains(number))
+      && !column.forall(_.usedDigits.contains(number)
+      && !box.forall(_.usedDigits.contains(number))))
 
 
   def neighbor(): Vector[Square] =

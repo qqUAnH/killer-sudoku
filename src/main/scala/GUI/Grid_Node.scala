@@ -17,7 +17,7 @@ import logic.Sodoku
 
 
 // create a StackPane that combine a square a path and a text box which represent Square's value
-class StackedSquare(x:Int,y:Int,val gridPane: GridPane,bottomBar:Array[BottomStackPane]) extends StackPane :
+class StackedSquare(x:Int,y:Int,val gridPane: SodokuGrid,bottomBar:Array[BottomStackPane]) extends StackPane :
     this.focusTraversable = true
     gridPane.add(this,x,y)
     // create and add components to the pane

@@ -1,7 +1,9 @@
 package GUI
 import scalafx.scene.layout._
 
-class SodokuGrid(bottomPane:Array[BottomStackPane]) extends GridPane {
+class SodokuGrid(val bottomPane:Array[BottomStackPane]) extends GridPane {
+  
+  var allStackedSquare :Vector[StackedSquare]= Vector()
   def update() =
     this.children = List()
     val bottombar = new GridPane()
@@ -14,10 +16,10 @@ class SodokuGrid(bottomPane:Array[BottomStackPane]) extends GridPane {
     for {x <- 0 until 9
          y <- 0 until 9
          } do
-      new StackedSquare(x, y, this, bottomPane)
+      allStackedSquare = allStackedSquare :+ new StackedSquare(x, y, this, bottomPane)
       
-  def update2() =
-    this.children =List()
+
+
 
 
 

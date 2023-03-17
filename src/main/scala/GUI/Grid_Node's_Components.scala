@@ -102,8 +102,6 @@ class NumberBox( pane:StackedSquare) extends Text :
         case KeyCode.Y          => Sodoku.redo()
         case _                  => println("throw song")
       this.visible = true
-      pane.possibleComb.visible = false
-      pane.possibleComb.update()
       this.update()
     }
 
@@ -155,6 +153,14 @@ class PossibleComb(pane:StackedSquare) extends Text:
       this.setText(""+value.get)
   this.update()
   this.visible = false
+  pane.hoverProperty().onChange( (_,_,_) =>
+    pane.numberBox.visible = true
+    this.visible = false)
+
+  pane.numberBox.textProperty().onChange( (_,_,_) =>
+    pane.gridPane.allStackedSquare.foreach( _.possibleComb.update())
+    println("a") )
+
 
 
 
