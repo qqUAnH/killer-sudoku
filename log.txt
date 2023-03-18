@@ -79,23 +79,31 @@ That is , It is possible for me to get feedback based on what I have done based 
 
 
 20/3 interim report:
-  In the last two weeks , I have make some adjustment regarding how GUI package was structured as well as implementign a file management scheme with os.lib
-  The changes in the GUI include seperating Components into Grid_Node and Grid_Node's component .In Grid_Node you can find the old Stacked Square with some new feature
-, and the new class BottomStackPane which indicate if one number digit can fit in a square according to the basic sodoku rule.Before making some comment about the new class ,
-I want to talk about SodokuGrid which exteneded from GridPane . SodokuGrid is essentially a GridPane ,withone extra methods: 
+  In the last two weeks , I have implement the missing features , and now the program have all the features it needed.
+  I have make some adjustment regarding how GUI package was structured to facilitate implementing new feature as well as implementign a file management scheme with os.lib.
+  The changes in the GUI include seperating Components into Grid_Node and Grid_Node's component and turning some function into classes , and removing some redudant function.Since ,You can
+find all the detail in my commits , this report will decidate to illustrate some point which I found worth mentioning
+In Grid_Node you can find the old Stacked Square with some new feature of seperating , and the new class BottomStackPane which indicate if one number digit can fit in a square according to the basic sodoku rule.
+Before making some comment about the new class ,I want to talk about SodokuGrid which exteneded from GridPane . SodokuGrid is essentially a GridPane ,withone extra methods:
      + update() : which together with the new file magagement scheme allow the programm to swap into new sodoku puzzle .In detail , whenever player load the newfile , given the
-     file is valid , this methods will erase all children Node in the grid , and replace them with new one. 
+     file is valid , this methods will erase all children Node in the grid , and replace them with new one.
   Sodokugrid will have 9 column and 10 rows . The first 9 columns will be used to show the puzzle and the last row will be combined to show the possible combnation .Thus 9 instance
 of BottomStackPane will be used to indicate 9 numbers from 1-9 . This class will work such that valid number will have color White while the other will be left black.
-  StackedSquare also have a outline path as well a dotted path which seperate Boxed and SubAreas respectively
-  
+
   Concernign the file management scheme , I will use circe lib with Os.lib to read and decode file .Circe is amazingly convenient as it can automaticly derive and ,encode file .
-The same thing can be said with os.lib which is capable of handling relative file path ,and managing stream so I won't have to worry about forgetting to close a file .
-I have tested them with the GUI , and the result was possitive . But there is some sort of expection needed to be handler ( for instance , when trying to read an invalid file ,
+The same thing can be said with os.lib which is capable of handling relative file path ,and managing stream so that I won't have to worry about forgetting to close a file .
+I have tested them with the GUI , and the result was possitive.But there is some sort of expection needed to be handler ( for instance , when trying to read an invalid file ,
 or when the user don't chosse any file.
-     
-  
-  
-  
-   
+  In the next two weeks I will try to handle all the excepting as well as modifying some part of the program code to improving its fuctionality and reabilities . For instances ,
+The class Square used some Option varible , but I haven't utilize this feature to minize error ( something I use get , instead of map , and forall to manipulate the varible inside ,
+which is contrary to what I intended) .
+  Also , Currently there is only a test for datastructure , which I am not sure wheter it is decent enough in terms of exhaustivity , so if you have any comment pls tell me.
+  In summary , the last two weeks wersn,t the most productive weeks . But I think I am still ahead of the schedule. 10-20 odds hours were spent in last two weeks.
+
+
+
+
+
+
+
 
