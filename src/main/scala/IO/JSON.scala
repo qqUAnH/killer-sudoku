@@ -14,7 +14,7 @@ import os.Path
 
 //  https://stackoverflow.com/questions/17521364/scala-writing-json-object-to-file-and-reading-it
 // https://docs.oracle.com/javase/7/docs/api/java/io/File.html#separatorChar
-object JSON {
+object  JSON {
   val saveFolder = os.pwd / os.RelPath("Save_File")
   implicit val SquareEncoder : Encoder[Square] = square => Json.obj(
     "value"   -> square.value.asJson ,

@@ -1,9 +1,14 @@
 package GUI
 import scalafx.scene.layout._
+import logic._
 
 class SodokuGrid(val bottomPane:Array[BottomStackPane]) extends GridPane {
   
   var allStackedSquare :Vector[StackedSquare]= Vector()
+  
+  def sameAreaNode[B <: Area](  area: B ) :Vector[StackedSquare] =
+    allStackedSquare.filter( _.square.sameArea( area))
+    
   def update() =
     this.children = List()
     val bottombar = new GridPane()

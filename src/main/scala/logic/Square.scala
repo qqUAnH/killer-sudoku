@@ -13,6 +13,8 @@ class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
   var column  : Option[Column] = None
   var box     : Option[Box] = None
   var subArea : Option[SubArea] = None
+
+  def area : Vector[Option[Area]] = Vector(row,column,box,subArea)
   
   def isValid: Boolean =
     row.isDefined && column.isDefined && box.isDefined && subArea.isDefined && (color != Color.White)
@@ -38,6 +40,16 @@ class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
       case  a:Row     => this.row     = Some(a)
       case  a:Column  => this.column  = Some(a)
       case  a:Box     => this.box     = Some(a)
+
+  def sameArea[B <: Area]( area: B):Boolean =
+    area match
+      case a: SubArea => this.subArea.get == area
+      case a: Row     => this.row.get     == area
+      case a: Column  => this.column.get  == area
+      case a: Box     => this.box.get     == area
+
+  def filledArea() :Vector[Area]=
+    area.map(_.get).filter(_.isFilled())
 
   // this function isn't finished
   def updatePossibleNumbers() =

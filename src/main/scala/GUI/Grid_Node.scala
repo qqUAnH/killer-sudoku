@@ -22,7 +22,7 @@ class StackedSquare(x:Int,y:Int,val gridPane: SodokuGrid,bottomBar:Array[BottomS
     gridPane.add(this,x,y)
     // create and add components to the pane
     val square         = Sodoku.getSquare(x+y*9)
-    val rect           = CreateRectangle(square.color,this)
+    val rect           = SodokuRectangle(this)
     val numberBox      = NumberBox(this)
     val path           = createPath(this)
     val dot            = createDottedLine(this)

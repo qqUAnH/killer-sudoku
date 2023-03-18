@@ -13,9 +13,12 @@ trait Iterator[Square]:
 end Iterator
 
 trait Area( squares:Vector[Square]):
+  val alphabet   = Vector.tabulate(9)(_+1)
   def usedDigits: Vector[Int] = squares.map( square => square.value).filter( _ != 0)
   def validate()   = usedDigits.distinct.length == usedDigits.length
-  def addSquares() = this.squares.foreach( square => square.addArea(this))
+  def isFilled()   = squares.forall( _.value != 0)
+  def addSquares() =
+    this.squares.foreach(square => square.addArea(this))
 
 
 case class Row( squares:Vector[Square],position:Int) extends Iterable[Square] with Area(squares:Vector[Square]):
@@ -35,8 +38,6 @@ end Column
 
 case class SubArea( squares:Vector[Square],sum:Int ) extends Iterable[Square] with Area(squares:Vector[Square]):
   var color:Option[Color]  = None
-
-  val alphabet   = Vector.tabulate(9)(_+1)
 
   val colorPlate = Vector(Color.LightSkyBlue,Color.Coral,Color.SpringGreen,Color.PaleVioletRed).map(_.brighter)
 

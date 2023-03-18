@@ -17,8 +17,9 @@ import logic.Sodoku
 
 
 // Create a reactangle which change color when its parent node is hovered
-def CreateRectangle( color:Color , pane: StackPane ) :shape.Rectangle =
-  new shape.Rectangle() :
+class SodokuRectangle(  pane: StackedSquare ) extends shape.Rectangle :
+    val color:Color = pane.square.color
+    val square      = pane.square
     pane.children.add(this)
     fill=color
     x = 0
@@ -26,14 +27,31 @@ def CreateRectangle( color:Color , pane: StackPane ) :shape.Rectangle =
     width = squareLength
     height = squareLength
     var i = 0
-    parent.value.hoverProperty.onChange((_, _, _) =>
-      if i == 0 then
-        i=1
-        this.fill.update(color.darker())
+    def belongTofilledArea = square.filledArea().nonEmpty
+
+    def update1() =
+      val targetNode = square.filledArea().flatMap(area => pane.gridPane.sameAreaNode(area))
+      if belongTofilledArea then
+        targetNode.foreach(_.rect.fill.update(Gray))
       else
-        i=0
-        this.fill.update(color))
-end CreateRectangle
+        targetNode.foreach( node => node.rect.update2(false))
+        targetNode.foreach(_.requestFocus())
+        pane.gridPane.requestFocus()
+
+    def update2(control:Boolean):Unit =
+      if !belongTofilledArea then
+        if control then
+          this.fill.update(color.darker)
+        else
+          this.fill.update(color)
+
+
+    parent.value.hoverProperty.onChange((_, _, _) =>
+      this.update2( parent.value.hoverProperty().value)
+    )
+
+end SodokuRectangle
+
 
 
 // Create a closed path which can be used to as a boundary of a node
@@ -102,6 +120,8 @@ class NumberBox( pane:StackedSquare) extends Text :
         case KeyCode.Y          => Sodoku.redo()
         case _                  => println("throw song")
       this.visible = true
+      pane.rect.update1()
+
       this.update()
     }
 
