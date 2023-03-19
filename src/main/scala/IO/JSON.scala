@@ -25,7 +25,7 @@ object  JSON {
   implicitly[Decoder[SubArea]]
   def save( subAreas: Buffer[SubArea],path:Path) =
     try
-      val result =subAreas.asJson.spaces2
+      val result =subAreas.asJson.noSpaces
       os.write.over( path ,result)
     catch
       case _ => {
@@ -38,17 +38,23 @@ object  JSON {
   def load(path: Path):Option[Vector[SubArea]] =
     try
       val data = os.read(path)
+
       val parseResult: Either[ParsingFailure, Json] = parse(data)
       val result =parseResult match
-        case Left(parsefail) => throw IOException("msg")
+        case Left(parsefail) =>
+          println(parsefail.getMessage)
+          throw IOException("msg")
         case Right(json) => {
         val allsubArea = json.asArray.get.map( x=> x.as[SubArea])
         allsubArea.map(_.getOrElse( null)).toVector
       }
+        println(result)
       Some(result)
     catch
       case e:NullPointerException => None
-      case _                      => None
+      case _                      =>
+        println("Fail")
+        None
       
 }
 

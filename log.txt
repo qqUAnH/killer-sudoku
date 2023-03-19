@@ -100,6 +100,7 @@ which is contrary to what I intended) .
   Also , Currently there is only a test for datastructure , which I am not sure wheter it is decent enough in terms of exhaustivity , so if you have any comment pls tell me.
   In summary , the last two weeks wersn,t the most productive weeks . But I think I am still ahead of the schedule. 10-20 odds hours were spent in last two weeks.
 
+Ps: I add some line of code that give information about syntax error incase of you want to create your own sodoku puzzle .
 
 
 

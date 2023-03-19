@@ -23,9 +23,6 @@ class Puzzle {
       boxes = boxes :+ Box( boxSquare, rowGroup*3 +y)
 
 
-
-
-
   def setUpPuzzle2( processedData :Vector[SubArea]) =
     try
       val squareValue = processedData.flatMap(_.squares).sortBy(_.position).map(_.value)
