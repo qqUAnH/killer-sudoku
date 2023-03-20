@@ -7,10 +7,10 @@ import scala.util.Try
 
 class Puzzle {
   private var squares :Vector[Square]   = Vector.tabulate(81)(x => new Square(0, x,this))
-  private val columns :Vector[Column]   = Vector.tabulate(9) ( x => Column(squares( Vector.tabulate(9)(i=> i*9+  x))        ,x))
-  private val rows    :Vector[Row]      = Vector.tabulate(9)(x => Row(squares(Vector.tabulate(9)(i => x * 9 + i)), x))
+  private var columns :Vector[Column]   = Vector.tabulate(9) ( x => Column( squares( Vector.tabulate(9)(i=> i*9+  x)),x))
+  private var rows    :Vector[Row]      = Vector.tabulate(9)(x => Row(squares(Vector.tabulate(9)(i => x * 9 + i)), x))
   private var boxes   :Vector[Box]      = Vector()
-  private val subAreas: Buffer[SubArea] = Buffer()
+  private var subAreas: Buffer[SubArea] = Buffer()
 
   // add square to row this is a little bit trickier
   for
@@ -22,21 +22,23 @@ class Puzzle {
       println( boxSquare.length)
       boxes = boxes :+ Box( boxSquare, rowGroup*3 +y)
 
-
   def setUpPuzzle2( processedData :Vector[SubArea]) =
     try
+      subAreas = Buffer()
       val squareValue = processedData.flatMap(_.squares).sortBy(_.position).map(_.value)
-      this.squares.zip(squareValue).foreach((square: Square, number: Int) => square.setValue(number))
+      this.squares.zip(squareValue).foreach(((square: Square, number: Int) => square.setValue(number)))
+
       columns.foreach(_.addSquares())
       rows.foreach(_.addSquares())
-      subAreas.foreach(_.addSquares())
       boxes.foreach(_.addSquares())
 
       for i <- processedData do
         val newSubArea = new SubArea(  squares(i.squares.map(_.position).toVector) , i.sum)
         newSubArea.addSquares()
         this.subAreas.append(newSubArea)
+      subAreas.foreach(_.updatePossibleComb())
       coloring(0)
+
       if !squares.forall(_.isValid) then
         throw Exception("corrupted data")
       else
@@ -62,29 +64,22 @@ class Puzzle {
         subAreas.drop(index+1).foreach( area=> area.updatePossibleColor())
         coloring(index+1)
 
-
-
   def isWin() :Boolean =
     allSquare().map( x => x.value ).count( _ >0)  == 81
       && allrows()   .forall( x=> x.validate())
       && allcolumns().forall( x=> x.validate())
+      && allSubAreas().forall( _.validate())
 
   def square(index:Int) = squares(index)
-
   def squares( list : Vector[Int]) : Vector[Square] =
     list.map( x => square(x) )
 
   def row   (index:Int) = rows(index)
-
   def column(index:Int) = columns(index)
-
   def box   (index:Int) = boxes(index)
 
-  def allrows(): Vector[Row] = this.rows
-
-  def allcolumns() :Vector[Column] = this.columns
-
-  def allSquare() :Vector[Square] = this.squares
-
-  def allSubAreas() :Buffer[SubArea] = this.subAreas
+  def allrows()     :Vector[Row]      = this.rows
+  def allcolumns()  :Vector[Column]   = this.columns
+  def allSquare()   :Vector[Square]   = this.squares
+  def allSubAreas() :Buffer[SubArea]  = this.subAreas
 }

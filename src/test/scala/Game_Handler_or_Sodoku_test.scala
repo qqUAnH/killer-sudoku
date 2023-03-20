@@ -12,4 +12,4 @@ import scala.util.Random.nextInt
 class SodokuSpec extends AnyFlatSpec :
   val gameObj = Sodoku
   
-  ""
+  assert(true)

@@ -21,20 +21,23 @@ class Menu_Controller(grid:SodokuGrid ,stage:JFXApp3.PrimaryStage) extends MenuB
   loadItem.onAction = (e:ActionEvent) => {
     val fileChooser = FileChooser()
     val selectedFile = fileChooser.showOpenDialog(stage)
-    val path  = os.Path(selectedFile.toPath)
-    Sodoku.load(path)
-    grid.update() }
+    try
+      val path  = os.Path(selectedFile.toPath)
+      Sodoku.load(path)
+      grid.update()
+    catch
+      case e:NullPointerException => println("No file chossen")
+  }
 
   saveItem.onAction = (e:ActionEvent) =>{
-    //
+    try
       val fileChooser = FileChooser()
       val selectedFile = fileChooser.showOpenDialog(stage)
       val path = os.Path(selectedFile.toPath)
-      Sodoku.save(path) }
-
-
-
-
+      Sodoku.save(path)
+    catch
+      case e:NullPointerException => println("No file chossen")
+  }
   exitItem.onAction = (e:ActionEvent) => {sys.exit(0)}
   fileMenu.items =List( loadItem ,saveItem,new SeparatorMenuItem ,exitItem)
   this.menus = List(fileMenu)

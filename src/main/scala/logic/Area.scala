@@ -1,6 +1,4 @@
 package logic
-
-
 import scala.collection.mutable.Buffer
 import scala.collection.Iterator
 import scalafx.scene.paint.Color
@@ -13,12 +11,14 @@ trait Iterator[Square]:
 end Iterator
 
 trait Area( squares:Vector[Square]):
-  val alphabet   = Vector.tabulate(9)(_+1)
-  def usedDigits: Vector[Int] = squares.map( square => square.value).filter( _ != 0)
-  def validate()   = usedDigits.distinct.length == usedDigits.length
-  def isFilled()   = squares.forall( _.value != 0)
+  val alphabet  :Vector[Int] = Vector.tabulate(9)(_ + 1)
+  def usedDigits:Vector[Int] = squares.map( square => square.value).filter( _ != 0)
+  def validate():Boolean     = usedDigits.distinct.length == usedDigits.length
+  def isFilled  :Boolean     = squares.forall(_.value != 0)
+  
   def addSquares() =
     this.squares.foreach(square => square.addArea(this))
+end Area
 
 
 case class Row( squares:Vector[Square],position:Int) extends Iterable[Square] with Area(squares:Vector[Square]):
@@ -37,30 +37,18 @@ end Column
 
 
 case class SubArea( squares:Vector[Square],sum:Int ) extends Iterable[Square] with Area(squares:Vector[Square]):
+  def iterator = squares.iterator
   var color:Option[Color]  = None
 
-  val colorPlate = Vector(Color.LightSkyBlue,Color.Coral,Color.SpringGreen,Color.PaleVioletRed).map(_.brighter)
+  private val colorPlate = Vector(Color.LightSkyBlue,Color.Coral,Color.SpringGreen,Color.PaleVioletRed).map(_.brighter)
 
   var possibleColor : Vector[Color] = Vector(Color.LightSkyBlue,Color.Coral,Color.SpringGreen,Color.PaleVioletRed)
 
   def currentSum :Int = sum - squares.foldLeft(0)( (current ,next) => current + next.value)
-
   def numberOfEmptySquares :Int = squares.count( _.value ==0)
-  def iterator = squares.iterator
-
-
-  def neigbor: Vector[SubArea] =
-    this.squares.flatMap( square => square.neighbor()).filter( square => square.subArea.get != this).map( square => square.subArea.get).distinct.toVector
-
-  def updatePossibleColor() =
-    val usedColor =this.neigbor.filter( x=> x.color.isDefined).map( x => x.color.get)
-    this.possibleColor = this.colorPlate.filter( color => !usedColor.contains(color))
-
-  def newColor() =
-    val index  =Random.nextInt(possibleColor.length)
-    this.color = Some(possibleColor(index))
-
-  def numberOfPossibleCombination( numberOfSquares:Int,alphabet:Vector[Int],sum:Int):Int =
+  var possibleComb         :Int = 0
+  
+  private def calculatePossibleCombination( numberOfSquares:Int,alphabet:Vector[Int],sum:Int):Int =
     if numberOfSquares == 0 then
       0
     else if numberOfSquares == 1 then
@@ -68,8 +56,24 @@ case class SubArea( squares:Vector[Square],sum:Int ) extends Iterable[Square] wi
     else if alphabet.length  < numberOfSquares then
       0
     else
-      numberOfPossibleCombination(numberOfSquares, alphabet.drop(1), sum)
-        + numberOfPossibleCombination(numberOfSquares - 1, alphabet.drop(1), sum - alphabet(0))
+      calculatePossibleCombination(numberOfSquares, alphabet.drop(1), sum)
+        + calculatePossibleCombination(numberOfSquares - 1, alphabet.drop(1), sum - alphabet(0))
+      
+  def updatePossibleComb():Unit =
+    possibleComb= calculatePossibleCombination(numberOfEmptySquares , alphabet , currentSum)
+
+
+  def neigbor: Vector[SubArea] =
+    this.squares.flatMap(square => square.neighbor()).filter(square => square.getSubArea.get != this).map(square => square.getSubArea.get).distinct.toVector
+
+  def updatePossibleColor() =
+    val usedColor = this.neigbor.filter(x => x.color.isDefined).map(x => x.color.get)
+    this.possibleColor = this.colorPlate.filter(color => !usedColor.contains(color))
+
+  def newColor() =
+    val index = Random.nextInt(possibleColor.length)
+    this.color = Some(possibleColor(index))
+    
   override def validate(): Boolean =
     this.currentSum <= sum && this.usedDigits.distinct.length == this.usedDigits.length
 end SubArea

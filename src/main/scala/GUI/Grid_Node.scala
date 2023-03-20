@@ -29,12 +29,12 @@ class StackedSquare(x:Int,y:Int,val gridPane: SodokuGrid,bottomBar:Array[BottomS
     val possibleComb   = PossibleComb(this)
     
     //ADD a small number at the left cornner of the pane that indicate of of the subArea
-    if square.isFirstSquare && square.subArea.isDefined then
-      val sumText = new Text(""+ square.subArea.get.sum)
+    if square.isFirstSquare && square.getSubArea.isDefined then
+      val sumText = new Text(""+ square.getSubArea.get.sum)
       sumText.alignmentInParent = Pos.TopLeft
       sumText.fill = Red
-      sumText.scaleY = 1.05
-      sumText.scaleX = 1.05
+      sumText.scaleY = sumTextScale
+      sumText.scaleX = sumTextScale
       this.children.add(sumText)
 
     this.onMouseClicked = (m:MouseEvent) => {
@@ -51,9 +51,9 @@ end StackedSquare
 
 class BottomStackPane( index:Int) extends StackPane():
   val number     = index+1
-  val candidate = new Text(""+(number))
-  candidate.scaleX = 1.3
-  candidate.scaleY = 1.3
+  private val candidate = new Text(""+(number))
+  candidate.scaleX = candidateScale
+  candidate.scaleY = candidateScale
 
   // change color of candidate :Text to Read if the candidate number is according to the game rule , black otherwise )
   def updateColor(possible: Boolean): Unit =
@@ -61,10 +61,10 @@ class BottomStackPane( index:Int) extends StackPane():
       candidate.fill = White
     else
       candidate.fill = Black
-
+  
   this.alignment = Pos.Center
 
-  val rectangle = new Rectangle:
+  private val rectangle = new Rectangle:
     width = squareLength
     height =squareLength
     fill =Gray

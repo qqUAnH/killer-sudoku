@@ -16,30 +16,34 @@ import os.Path
 // https://docs.oracle.com/javase/7/docs/api/java/io/File.html#separatorChar
 object  JSON {
   val saveFolder = os.pwd / os.RelPath("Save_File")
-  implicit val SquareEncoder : Encoder[Square] = square => Json.obj(
-    "value"   -> square.value.asJson ,
-    "position"-> square.position.asJson
-  )
+
+  //Set up circe auto Parse and Decoder
+  implicit val SquareEncoder : Encoder[Square] =
+    square => Json.obj(
+      "value"   -> square.value.asJson ,
+      "position"-> square.position.asJson)
   implicit val squareDecoder : Decoder[Square] = Decoder.forProduct2("value","position")(Square.apply)
   implicitly[Encoder[SubArea]]
   implicitly[Decoder[SubArea]]
+
+
   def save( subAreas: Buffer[SubArea],path:Path) =
     try
       val result =subAreas.asJson.noSpaces
-      os.write.over( path ,result)
+      path match
+        case e:os.Path => os.write.over( path ,result)
+        case _         => throw NoFileSelected("Save cancelled")
     catch
-      case _ => {
-        println("Invalid Input")
-      }
-// Try catch stuff
+      case e:NoFileSelected => println("Save cancelled")
+
   def list() =
     os.list(saveFolder).map(_.toString.split("/").last) 
     
   def load(path: Path):Option[Vector[SubArea]] =
     try
       val data = os.read(path)
-
       val parseResult: Either[ParsingFailure, Json] = parse(data)
+
       val result =parseResult match
         case Left(parsefail) =>
           println(parsefail.getMessage)
@@ -48,13 +52,11 @@ object  JSON {
         val allsubArea = json.asArray.get.map( x=> x.as[SubArea])
         allsubArea.map(_.getOrElse( null)).toVector
       }
-        println(result)
       Some(result)
     catch
       case e:NullPointerException => None
       case _                      =>
         println("Fail")
         None
-      
 }
 

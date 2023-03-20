@@ -1,43 +1,15 @@
 package GUI
 import scalafx.embed.swing.SwingNode.*
-import scalafx.Includes.*
-import scalafx.beans.property.DoubleProperty
-import scalafx.scene.shape.Rectangle
 import scalafx.application.JFXApp3
-import scalafx.application.JFXApp3
-import scalafx.scene.control.CheckBox
 import scalafx.scene.{Scene, shape}
-import scalafx.scene.layout.Pane
-import scalafx.scene.paint.Color.*
-import scalafx.scene.paint.Paint.*
-import scalafx.scene.shape.*
-import scalafx.scene.control.Label
-import scalafx.scene.text.*
-import scalafx.scene.canvas.Canvas
 import scalafx.Includes.*
 import scalafx.application.JFXApp
-import scalafx.geometry.Insets
 import scalafx.scene.Scene
-import scalafx.scene.canvas.Canvas
 import scalafx.scene.layout.VBox
 import scalafx.scene.layout.HBox
 import scalafx.scene.layout.GridPane
-import scalafx.scene.layout.Background
-import scalafx.scene.layout.BackgroundFill
-import scalafx.scene.layout.CornerRadii
-import scalafx.scene.layout.ColumnConstraints
-import scalafx.scene.layout.RowConstraints
-import scalafx.scene.paint.Color.*
-import scalafx.scene.layout.*
-import scalafx.beans.property.*
 import scalafx.geometry.Pos
-import javafx.animation.AnimationTimer
-import javafx.scene.input.{KeyCode, KeyEvent, MouseEvent}
 import logic.*
-import scalafx.scene.layout.GridPane.{getColumnIndex, getRowIndex}
-import scalafx.scene.paint.Color
-import scalafx.application.Platform
-import scalafx.animation.AnimationTimer
 
 import scala.language.postfixOps
 

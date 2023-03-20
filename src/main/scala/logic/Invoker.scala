@@ -6,9 +6,9 @@ import logic.{SetValueCommand, Square}
 import scala.collection.mutable.Stack
 
 class Invoker() {
-  val undoStack:Stack[SetValueCommand]=Stack[SetValueCommand]()
+  private val undoStack:Stack[SetValueCommand]=Stack[SetValueCommand]()
 
-  val redoStack:Stack[SetValueCommand]=Stack[SetValueCommand]()
+  private val redoStack:Stack[SetValueCommand]=Stack[SetValueCommand]()
 
   def setValue(pane: StackedSquare, newValue:Int) =
     redoStack.popAll()

@@ -4,29 +4,38 @@ import scalafx.print.PrintColor
 import scalafx.scene.paint
 import scalafx.scene.paint.Color
 
-
-
-class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
+sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
   var possibleNumbers  = Vector.tabulate(9)(x=>x+1)
-  val validNumber      = Vector.tabulate(9)(x=>x+1)
-  var row     : Option[Row] = None
-  var column  : Option[Column] = None
-  var box     : Option[Box] = None
-  var subArea : Option[SubArea] = None
+  private val validNumber      = Vector.tabulate(9)(x=>x+1)
+
+  //
+  private var row     : Option[Row]     = None
+  private var column  : Option[Column]  = None
+  private var box     : Option[Box]     = None
+  private var subArea : Option[SubArea] = None
+
+  def getRow      = this.row
+  def getColumn   = this.column
+  def getBox      = this.box
+  def getSubArea  = this.subArea
 
   def area : Vector[Option[Area]] = Vector(row,column,box,subArea)
-  
-  def isValid: Boolean =
-    row.isDefined && column.isDefined && box.isDefined && subArea.isDefined && (color != Color.White)
-  
-  def isFirstSquare :Boolean =
-    subArea.map( area => area.squares.head).forall( _ == this )
 
-  def setValue( number : Int) =
+  // Any square should belong to a row ,column, box , and subArea , return false if respective varible is undefined
+  def isValid       :Boolean = row.isDefined && column.isDefined && box.isDefined && subArea.isDefined && (color != Color.White)
+
+  def isFirstSquare :Boolean = subArea.map( area => area.squares.head).forall( _ == this )
+
+  //change value of a square then update posssible squares in the same row , column and box
+  def setValue(number: Int): Unit=
     value = number
     row.foreach(_.squares.foreach(_.updatePossibleNumbers()))
     column.foreach(_.squares.foreach(_.updatePossibleNumbers()))
     box.foreach(_.squares.foreach(_.updatePossibleNumbers()))
+    subArea.foreach(_.updatePossibleComb())
+
+  def numberOfPossibleComb:Option[Int] =
+    subArea.map(_.possibleComb)
 
   def color: Color =
     if this.subArea.isDefined then
@@ -48,18 +57,14 @@ class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
       case a: Column  => this.column.get  == area
       case a: Box     => this.box.get     == area
 
-  def filledArea() :Vector[Area]=
-    area.map(_.get).filter(_.isFilled())
+  def filledArea() :Vector[Area]= area.map(_.get).filter(_.isFilled)
 
-  // this function isn't finished
-  def updatePossibleNumbers() =
-  // this methods throw error which mean we have read box yet
+  private def updatePossibleNumbers() =
     require( row.isDefined && column.isDefined  && subArea.isDefined && box.isDefined)
     possibleNumbers= validNumber.filter(number => 
-      !row.forall(_.usedDigits.contains(number))
+         !row   .forall(_.usedDigits.contains(number))
       && !column.forall(_.usedDigits.contains(number)
-      && !box.forall(_.usedDigits.contains(number))))
-
+      && !box   .forall(_.usedDigits.contains(number))))
 
   def neighbor(): Vector[Square] =
     val helper = position+1
@@ -68,6 +73,7 @@ class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
       .map( index => puzzle.square(index))
       .filter( square => square.row.get == this.row.get || square.column.get == this.column.get )
 }
+//a companion object to create new instances of Square : Will be a great aid to circe Json decoder and encoder
 object Square {
   def apply( value:Int , position: Int ) :Square =
     new Square(value , position, Sodoku.getPuzzle)

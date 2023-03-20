@@ -21,19 +21,19 @@ class LogicSpec extends AnyFlatSpec :
   
   // This series of test below will test if the function setupPuzzle works as intended
   "Every square " should "be assigned to a box" in {
-    assert( allSquares.forall(_.box.isDefined))
+    assert( allSquares.forall(_.getBox.isDefined))
    }
   "Every square " should "be assigned to a row" in {
-    assert(allSquares.forall(_.row.isDefined))
+    assert(allSquares.forall(_.getRow.isDefined))
   }
   "Every square " should "be assigned to a column" in {
-    assert(allSquares.forall(_.column.isDefined))
+    assert(allSquares.forall(_.getColumn.isDefined))
   }
   "Every square " should "be assigned to a subArea" in {
-    assert(allSquares.forall(_.subArea.isDefined))
+    assert(allSquares.forall(_.getSubArea.isDefined))
   }
   "Color of a square" should "be not White ,that is the coloring scheme work properly" in {
-    assert(allSquares.forall(_.subArea.forall(_.color.forall(_ != White))))
+    assert(allSquares.forall(_.getSubArea.forall(_.color.forall(_ != White))))
   }
   "Square in a same SubArea " should "have a same Color" in {
     assert( allSubAreas.forall( _.squares.map(_.color).distinct.length ==1))
@@ -55,13 +55,13 @@ class LogicSpec extends AnyFlatSpec :
       val newValue = Random.nextInt(9)+1
       square.setValue( newValue)
       println(newValue)
-      println( square.column.get.usedDigits.length + "aa")
-      assert(square.row.forall(_.forall( _.isValid)))
-      assert(square.box.forall(_.forall( _.isValid)))
-      assert(square.column.forall(_.forall(_.isValid )))
+      println( square.getColumn.get.usedDigits.length + "aa")
+      assert(square.getRow.forall(_.forall( _.isValid)))
+      assert(square.getBox.forall(_.forall( _.isValid)))
+      assert(square.getColumn.forall(_.forall(_.isValid )))
       square.setValue(0)
   }
-
+ //The data was taken from wiki:  https://en.wikipedia.org/wiki/Killer_sudoku
   "numberOfPossibleCombination" should "return correct number" in {
     val execptedValue = Map (
       1 -> Array((1,1), (2,1), (3,1), (4,1), (5,1), (6,1), (7,1), (8,1), (9,1)),
@@ -73,7 +73,7 @@ class LogicSpec extends AnyFlatSpec :
     def check(subArea: SubArea) =
       val currentSum =subArea.currentSum
       val emptySquare = subArea.numberOfEmptySquares
-      val result :Int= subArea.numberOfPossibleCombination( emptySquare , subArea.alphabet ,currentSum)
+      val result :Int= subArea.possibleComb
       val correctSum = execptedValue.apply(emptySquare).filter( (x:Int,y:Int) =>  x == currentSum)
       println(emptySquare + "##")
       println(correctSum.mkString(" "))
@@ -84,9 +84,6 @@ class LogicSpec extends AnyFlatSpec :
         correctSum.head._2 == result || result == 0
     allSubAreas.foreach(check(_))
     assert(allSubAreas.forall( check (_)))
-
-
-
   }
 
 
