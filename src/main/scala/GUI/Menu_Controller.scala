@@ -11,12 +11,18 @@ import scalafx.application.JFXApp3
 import scalafx.stage.FileChooser
 import os.Path
 
+
+/**
+ * This class act as a communication ground for the GUI and file management scheme.
+ * @todo : Make sure that the the file will throw expection when the user try to save onto the program code
+ * @param grid : The parent of all StackedSquare .If each StackedSquare represent a square in the puzzle,and SodokuGrid represnt the whole puzzle.
+ * @param stage: Parent Stage
+ */
 class Menu_Controller(grid:SodokuGrid ,stage:JFXApp3.PrimaryStage) extends MenuBar:
   private val fileMenu =  Menu("File")
   private val saveItem =  MenuItem("Save")
   private val exitItem =  MenuItem("Exit")
   private val loadItem =  Menu("Load")
-
 
   loadItem.onAction = (e:ActionEvent) => {
     val fileChooser = FileChooser()
@@ -28,7 +34,6 @@ class Menu_Controller(grid:SodokuGrid ,stage:JFXApp3.PrimaryStage) extends MenuB
     catch
       case e:NullPointerException => println("No file chossen")
   }
-
   saveItem.onAction = (e:ActionEvent) =>{
     try
       val fileChooser = FileChooser()

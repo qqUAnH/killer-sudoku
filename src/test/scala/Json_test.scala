@@ -28,10 +28,10 @@ class JsonSpec extends AnyFlatSpec:
     assert( JSON.load(pathToInvalidFile).isEmpty )
   }
   "load" should "throw execption when the user choose don't choose any file" in {
-    assert(false)
+    assert( JSON.load(null).isEmpty)
   }
 
   "save" should "throw exeception when the user don't choose any file" in {
-    assert(false)
+    assert( JSON.save(Sodoku.getPuzzle.allSubAreas(), null) == "Save cancelled")
   }
   

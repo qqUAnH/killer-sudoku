@@ -1,5 +1,4 @@
 package GUI
-
 import javafx.scene.input.{KeyCode, KeyCodeCombination, KeyCombination, KeyEvent, MouseEvent}
 import jdk.jfr.Label
 import logic.{Puzzle, Sodoku, Square}
@@ -16,12 +15,19 @@ import scalafx.scene.shape.Line
 import logic.Sodoku
 
 
-// create a StackPane that combine a square a path and a text box which represent Square's value
-class StackedSquare(x:Int,y:Int,val gridPane: SodokuGrid,bottomBar:Array[BottomStackPane]) extends StackPane :
+/**Each class StackedSquare represent a Square in sodoku grid.
+ *
+ * @param row : row index in parent SodokuGrid
+ * @param column : columns index in parent SodokuGrid
+ * @param gridPane : Parent SodokuGrod
+ * @param bottomBar : an Array of BottomStackPane which together represent possible number that can fit into this square according to te game rule
+ */
+
+class StackedSquare(row:Int,column:Int,val gridPane: SodokuGrid,bottomBar:Array[BottomStackPane]) extends StackPane :
     this.focusTraversable = true
-    gridPane.add(this,x,y)
+    gridPane.add(this,column,row)
     // create and add components to the pane
-    val square         = Sodoku.getSquare(x+y*9)
+    val square         = Sodoku.getSquare(column+row*9)
     val rect           = SodokuRectangle(this)
     val numberBox      = NumberBox(this)
     val path           = createPath(this)
@@ -36,7 +42,7 @@ class StackedSquare(x:Int,y:Int,val gridPane: SodokuGrid,bottomBar:Array[BottomS
       sumText.scaleY = sumTextScale
       sumText.scaleX = sumTextScale
       this.children.add(sumText)
-
+   
     this.onMouseClicked = (m:MouseEvent) => {
       bottomBar.foreach(pane=> pane.updateColor(square.possibleNumbers.contains(pane.number)))
       bottomBar.foreach(_.requestFocus())
@@ -47,8 +53,12 @@ class StackedSquare(x:Int,y:Int,val gridPane: SodokuGrid,bottomBar:Array[BottomS
     }
 end StackedSquare
 
-
-
+/**
+ * Each BottomStackedPane represnt a digit number from 1-9.The Color of this number will turn White if it is possible to put this number
+ * onto the currently hovered StackedSquare , and Black otherwise.
+ * Thus 9 instance of this class will enough to represnt all the possible numbers can be put onto a given StackedSquare.
+ * @param index: Determine the location of the Pane in the SodokuGrid as well as the digit number this class repesent which is equal to index +1
+ */
 class BottomStackPane( index:Int) extends StackPane():
   val number     = index+1
   private val candidate = new Text(""+(number))
@@ -61,7 +71,6 @@ class BottomStackPane( index:Int) extends StackPane():
       candidate.fill = White
     else
       candidate.fill = Black
-  
   this.alignment = Pos.Center
 
   private val rectangle = new Rectangle:

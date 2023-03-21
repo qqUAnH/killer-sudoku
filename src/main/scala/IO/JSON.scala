@@ -27,14 +27,15 @@ object  JSON {
   implicitly[Decoder[SubArea]]
 
 
-  def save( subAreas: Buffer[SubArea],path:Path) =
+  def save(subAreas: Buffer[SubArea], path: Path): String =
     try
-      val result =subAreas.asJson.noSpaces
+      val result = subAreas.asJson.noSpaces
       path match
-        case e:os.Path => os.write.over( path ,result)
-        case _         => throw NoFileSelected("Save cancelled")
+        case e: os.Path => os.write.over(path, result)
+        case _ => throw NoFileSelected("Save cancelled")
+      "Success"
     catch
-      case e:NoFileSelected => println("Save cancelled")
+      case e: NoFileSelected => "Save cancelled"
 
   def list() =
     os.list(saveFolder).map(_.toString.split("/").last) 

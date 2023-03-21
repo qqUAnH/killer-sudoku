@@ -16,7 +16,11 @@ import scalafx.scene.shape.Line
 import logic.Sodoku
 
 
-// Create a reactangle which change color when its parent node is hovered
+/**
+ * SodokuRectangle function as the background of parent StackedSquare , and will change its color when the user hover to parent node or
+ * when all the squares in the same Area is filled ( have value diffirent to 0)
+ * @param pane:
+ */
 class SodokuRectangle(  pane: StackedSquare ) extends shape.Rectangle :
     val color:Color = pane.square.color
     val square      = pane.square
@@ -52,9 +56,13 @@ class SodokuRectangle(  pane: StackedSquare ) extends shape.Rectangle :
 end SodokuRectangle
 
 
-
-// Create a closed path which can be used to as a boundary of a node
-// Warning using a lot of if then :
+/**
+ * @param pane:parent StackedSquare
+ * @return : This function will always A Vector of 4 dotted line that repesent the boundary of the square represented parent StackedSquare.
+ *           These line visiblity will be decide by the location of the square.
+ *           In detail, the visibilties of these line will initially set to false ,
+ *           and will be change to true if the neigbor of the square in the direction of each line is not in the sub area
+ */
 def createDottedLine(pane:StackedSquare):Vector[Line]=
   var result:Vector[Line] = Vector()
   var square = pane.square
@@ -93,17 +101,21 @@ def createDottedLine(pane:StackedSquare):Vector[Line]=
   result
 
 
-
+/**
+ * This class repesent the value of the Square the parent StackedSquare represent ,and act as KeyBoardEvent Handler.
+ * Each time the user enters the valid input. NumberBox will update its textProperty accordingly via the function update.
+ * @param pane:parent StackedSquare
+ * */
 class NumberBox( pane:StackedSquare) extends Text :
     val square = pane.square
     pane.children.add(this)
+    this.scaleX = numberBoxScale
+    this.scaleY = numberBoxScale
     def update():Unit=
       if square.value < 10 && square.value > 0 then
         this.textProperty().update(""+square.value)
       else
         this.textProperty().update("")
-    this.scaleX = numberBoxScale
-    this.scaleY = numberBoxScale
     this.update()
 
     pane.onKeyPressed = (ke:KeyEvent) => {
@@ -123,11 +135,14 @@ class NumberBox( pane:StackedSquare) extends Text :
         case _                  => ()
       this.visible = true
       pane.rect.update1()
-
       this.update()
     }
 
-
+/**
+ * @param pane : Parent StackedSquare
+ * @return This function will always return a Vector of 4 Line , Which act as te boundary of The parent StackedSquare.
+ *         StorkeWidth of these line will be decided depend of the location of the parent StackedSquare
+ */
 def createPath(pane: StackedSquare): Vector[Line] =
   var result: Vector[Line] = Vector()
   var square = pane.square
@@ -165,6 +180,12 @@ def createPath(pane: StackedSquare): Vector[Line] =
   result
 end createPath
 
+/**
+ * Represent number of possible combination that can be put to the SubArea which the square represented by its parent Stacked Square belong to.
+ * Visibilty is initialy set to false , unless the prarent StackedSquare is clicked ,and will set back to false ,when the user hover the cursor
+ * away.
+ * @param pane:Parent StackedSquare
+ */
 class PossibleComb(pane:StackedSquare) extends Text:
   this.setText("")
   val numberBox =pane.numberBox

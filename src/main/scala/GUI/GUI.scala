@@ -13,10 +13,11 @@ import logic.*
 
 import scala.language.postfixOps
 
-
+/**
+ * Main object
+ */
 object Main extends JFXApp3:
   //SHould some be used in this situation
-
   val sodoku=Sodoku.getPuzzle
   def start(): Unit =
     //NOte for references LOL

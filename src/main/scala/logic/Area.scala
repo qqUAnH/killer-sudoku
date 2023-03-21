@@ -10,7 +10,8 @@ trait Iterator[Square]:
   def next():Square
 end Iterator
 
-trait Area( squares:Vector[Square]):
+trait Area( squares:Vector[Square]) extends Iterable[Square]:
+  def iterator = squares.iterator
   val alphabet  :Vector[Int] = Vector.tabulate(9)(_ + 1)
   def usedDigits:Vector[Int] = squares.map( square => square.value).filter( _ != 0)
   def validate():Boolean     = usedDigits.distinct.length == usedDigits.length
@@ -21,23 +22,19 @@ trait Area( squares:Vector[Square]):
 end Area
 
 
-case class Row( squares:Vector[Square],position:Int) extends Iterable[Square] with Area(squares:Vector[Square]):
-  def iterator = squares.iterator
+case class Row( squares:Vector[Square],position:Int) extends  Area(squares:Vector[Square]):
 end Row
 
 
-case class Box( squares:Vector[Square],  position: Int) extends Iterable[Square] with Area(squares:Vector[Square]):
-  def iterator = squares.iterator
+case class Box( squares:Vector[Square],  position: Int) extends  Area(squares:Vector[Square]):
 end Box
 
 
-case class Column(squares:Vector[Square], val position: Int) extends Iterable[Square]with Area(squares:Vector[Square]):
-  def iterator = squares.iterator
+case class Column(squares:Vector[Square], val position: Int) extends  Area(squares:Vector[Square]):
 end Column
 
 
-case class SubArea( squares:Vector[Square],sum:Int ) extends Iterable[Square] with Area(squares:Vector[Square]):
-  def iterator = squares.iterator
+case class SubArea( squares:Vector[Square],sum:Int ) extends Area(squares:Vector[Square]):
   var color:Option[Color]  = None
 
   private val colorPlate = Vector(Color.LightSkyBlue,Color.Coral,Color.SpringGreen,Color.PaleVioletRed).map(_.brighter)
