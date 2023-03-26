@@ -3,16 +3,16 @@ package logic
 import scalafx.print.PrintColor
 import scalafx.scene.paint
 import scalafx.scene.paint.Color
+import scala.collection.mutable.Buffer
 
 sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
   var possibleNumbers  = Vector.tabulate(9)(x=>x+1)
-  private val validNumber      = Vector.tabulate(9)(x=>x+1)
-
-  //
+  private val validNumber      =Vector.tabulate(9)(x=>x+1)
   private var row     : Option[Row]     = None
   private var column  : Option[Column]  = None
   private var box     : Option[Box]     = None
   private var subArea : Option[SubArea] = None
+  var usedNumberinSodokuSolver:Buffer[Int] = Buffer()
 
   def getRow      = this.row
   def getColumn   = this.column
@@ -21,12 +21,32 @@ sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
 
   def area : Vector[Option[Area]] = Vector(row,column,box,subArea)
 
+  def addArea[B <: Area](area: B): Unit =
+    area match
+      case a: SubArea => this.subArea = Some(a)
+      case a: Row => this.row = Some(a)
+      case a: Column => this.column = Some(a)
+      case a: Box => this.box = Some(a)
+
+  def sameArea[B <: Area](area: B): Boolean =
+    area match
+      case a: SubArea => this.subArea.get == area
+      case a: Row => this.row.get         == area
+      case a: Column => this.column.get   == area
+      case a: Box => this.box.get         == area
+
+
+
   // Any square should belong to a row ,column, box , and subArea , return false if respective varible is undefined
   def isValid       :Boolean = row.isDefined && column.isDefined && box.isDefined && subArea.isDefined && (color != Color.White)
 
+  def haveNonePossilbeNumber:Boolean = this.possibleNumbers.isEmpty
+
   def isFirstSquare :Boolean = subArea.map( area => area.squares.head).forall( _ == this )
 
+  def isEmpty       :Boolean = this.value == 0
   //change value of a square then update posssible squares in the same row , column and box
+  //Could this be improved
   def setValue(number: Int): Unit=
     value = number
     row.foreach(_.squares.foreach(_.updatePossibleNumbers()))
@@ -43,28 +63,21 @@ sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
     else
       Color.White
 
-  def addArea[B <: Area ]( area : B):Unit =
-    area match
-      case  a:SubArea => this.subArea = Some(a)
-      case  a:Row     => this.row     = Some(a)
-      case  a:Column  => this.column  = Some(a)
-      case  a:Box     => this.box     = Some(a)
-
-  def sameArea[B <: Area]( area: B):Boolean =
-    area match
-      case a: SubArea => this.subArea.get == area
-      case a: Row     => this.row.get     == area
-      case a: Column  => this.column.get  == area
-      case a: Box     => this.box.get     == area
 
   def filledArea() :Vector[Area]= area.map(_.get).filter(_.isFilled)
 
-  private def updatePossibleNumbers() =
+  def updatePossibleNumbers( ) =
     require( row.isDefined && column.isDefined  && subArea.isDefined && box.isDefined)
-    possibleNumbers= validNumber.filter(number => 
+    possibleNumbers= validNumber.filter(number =>
          !row   .forall(_.usedDigits.contains(number))
-      && !column.forall(_.usedDigits.contains(number)
-      && !box   .forall(_.usedDigits.contains(number))))
+      && !column.forall(_.usedDigits.contains(number))
+      && !box   .forall(_.usedDigits.contains(number))
+      && !usedNumberinSodokuSolver.contains(number))
+
+
+  def removeFromPossibleNumber( number: Int):Unit =
+    possibleNumbers = possibleNumbers.filter( _ != number)
+
 
   def neighbor(): Vector[Square] =
     val helper = position+1

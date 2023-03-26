@@ -14,7 +14,7 @@ trait Area( squares:Vector[Square]) extends Iterable[Square]:
   def iterator = squares.iterator
   val alphabet  :Vector[Int] = Vector.tabulate(9)(_ + 1)
   def usedDigits:Vector[Int] = squares.map( square => square.value).filter( _ != 0)
-  def validate():Boolean     = usedDigits.distinct.length == usedDigits.length
+  def validate()  :Boolean     = usedDigits.distinct.length == usedDigits.length
   def isFilled  :Boolean     = squares.forall(_.value != 0)
   
   def addSquares() =

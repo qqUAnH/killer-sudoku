@@ -31,9 +31,16 @@ object Sodoku extends App {
     else
       println("Invalid File")
 
-  load(JSON.saveFolder / "savefile2.txt")
+  load(JSON.saveFolder / "Invalidsave.txt")
+
 
   def save( path: Path) = 
-    JSON.save(this.getPuzzle.allSubAreas(),path)
+    JSON.save(this.getPuzzle.allSquare().map(_.getSubArea.get).distinct.toBuffer ,path)
+  @main def test=
+    
+    println(getPuzzle.allBoxes().map(_.map(_.position+1)).mkString("\n"))
+
+
+
 
 }

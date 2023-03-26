@@ -40,6 +40,7 @@ class Puzzle {
       coloring(0)
 
       if !squares.forall(_.isValid) then
+
         throw Exception("corrupted data")
       else
         println("Sucess")
@@ -47,7 +48,7 @@ class Puzzle {
       case _ => println("corrupted data")
   end setUpPuzzle2
 
-  def coloring( index :Int) :Unit =
+  private def coloring( index :Int) :Unit =
     // can throw error here
     if index == 0 then
       subAreas(index).newColor()
@@ -64,11 +65,56 @@ class Puzzle {
         subAreas.drop(index+1).foreach( area=> area.updatePossibleColor())
         coloring(index+1)
 
-  def isWin() :Boolean =
-    allSquare().map( x => x.value ).count( _ >0)  == 81
-      && allrows()   .forall( x=> x.validate())
-      && allcolumns().forall( x=> x.validate())
-      && allSubAreas().forall( _.validate())
+
+  def isGameRuleBroken:Boolean =
+    !allrows().forall(x => x.validate())
+      && !allcolumns().forall(x => x.validate())
+      && !allSubAreas().forall(_.validate())
+
+  def isWin :Boolean =
+    allSquare().forall( !_.isEmpty)
+      && !isGameRuleBroken
+
+  /**
+   * @todo:Currently false I should remain to fill without any probelm for a very long while but the program began to back track when the index is 16
+   *
+   * @param index
+   * @param targetSquare
+   */
+  def solve(index:Int , targetSquare:Vector[Square]) :Unit  =
+    if index == 0 then
+      val currentSquare =targetSquare(index)
+      if currentSquare.haveNonePossilbeNumber then
+        println("impossible Value")
+      else
+        currentSquare.setValue( currentSquare.possibleNumbers(0) )
+        solve(index+1,targetSquare)
+    else if  index < targetSquare.length then
+      val currentSquare =  targetSquare(index)
+      val previousSquare =targetSquare(index-1)
+      if currentSquare.haveNonePossilbeNumber then
+        if index > 1 && previousSquare.haveNonePossilbeNumber then
+          previousSquare.usedNumberinSodokuSolver=Buffer()
+          targetSquare(index-2).usedNumberinSodokuSolver.append( targetSquare(index-2).value)
+          previousSquare.setValue(0)
+          targetSquare(index-2).setValue(0)
+          solve(index-2,targetSquare)
+        else
+          previousSquare.usedNumberinSodokuSolver.append(previousSquare.value)
+          previousSquare.setValue(0)
+          solve(index-1,targetSquare)
+      else
+        currentSquare.setValue(currentSquare.possibleNumbers(0))
+        solve(index+1,targetSquare)
+    else
+      println(isWin)
+  end solve
+
+
+
+
+  def emptySquare       =
+    squares.filter(_.isEmpty)
 
   def square(index:Int) = squares(index)
   def squares( list : Vector[Int]) : Vector[Square] =
@@ -82,4 +128,5 @@ class Puzzle {
   def allcolumns()  :Vector[Column]   = this.columns
   def allSquare()   :Vector[Square]   = this.squares
   def allSubAreas() :Buffer[SubArea]  = this.subAreas
+  def allBoxes()    = this.boxes
 }
