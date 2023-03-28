@@ -41,7 +41,7 @@ case class SubArea( squares:Vector[Square],sum:Int ) extends Area(squares:Vector
 
   var possibleColor : Vector[Color] = Vector(Color.LightSkyBlue,Color.Coral,Color.SpringGreen,Color.PaleVioletRed)
 
-  def currentSum :Int = sum - squares.foldLeft(0)( (current ,next) => current + next.value)
+  def currentSum :Int =  squares.foldLeft(0)( (current ,next) => current + next.value)
   def numberOfEmptySquares :Int = squares.count( _.value ==0)
   var possibleComb         :Int = 0
   
@@ -59,7 +59,6 @@ case class SubArea( squares:Vector[Square],sum:Int ) extends Area(squares:Vector
   def updatePossibleComb():Unit =
     possibleComb= calculatePossibleCombination(numberOfEmptySquares , alphabet , currentSum)
 
-
   def neigbor: Vector[SubArea] =
     this.squares.flatMap(square => square.neighbor()).filter(square => square.getSubArea.get != this).map(square => square.getSubArea.get).distinct.toVector
 
@@ -72,7 +71,11 @@ case class SubArea( squares:Vector[Square],sum:Int ) extends Area(squares:Vector
     this.color = Some(possibleColor(index))
     
   override def validate(): Boolean =
-    this.currentSum <= sum && this.usedDigits.distinct.length == this.usedDigits.length
+    if this.numberOfEmptySquares == 0 then
+     this.currentSum == sum
+    else
+     this.currentSum <= sum
+
 end SubArea
 
 object SubArea:

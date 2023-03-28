@@ -4,6 +4,7 @@ import scalafx.scene.paint.Color
 
 import scala.util.Random
 import scala.util.Try
+import scala.annotation.tailrec
 
 class Puzzle {
   private var squares :Vector[Square]   = Vector.tabulate(81)(x => new Square(0, x,this))
@@ -67,47 +68,45 @@ class Puzzle {
 
 
   def isGameRuleBroken:Boolean =
-    !allrows().forall(x => x.validate())
-      && !allcolumns().forall(x => x.validate())
-      && !allSubAreas().forall(_.validate())
+    val re = !(allrows().forall(x => x.validate())
+      && allcolumns().forall(x => x.validate())
+      && allBoxes().forall(x=>x.validate())
+      )
+    // gamerule always return true
+    re
 
   def isWin :Boolean =
     allSquare().forall( !_.isEmpty)
       && !isGameRuleBroken
 
-  /**
-   * @todo:Currently false I should remain to fill without any probelm for a very long while but the program began to back track when the index is 16
-   *
-   * @param index
-   * @param targetSquare
-   */
-  def solve(index:Int , targetSquare:Vector[Square]) :Unit  =
-    if index == 0 then
-      val currentSquare =targetSquare(index)
-      if currentSquare.haveNonePossilbeNumber then
-        println("impossible Value")
-      else
-        currentSquare.setValue( currentSquare.possibleNumbers(0) )
-        solve(index+1,targetSquare)
-    else if  index < targetSquare.length then
-      val currentSquare =  targetSquare(index)
-      val previousSquare =targetSquare(index-1)
-      if currentSquare.haveNonePossilbeNumber then
-        if index > 1 && previousSquare.haveNonePossilbeNumber then
-          previousSquare.usedNumberinSodokuSolver=Buffer()
-          targetSquare(index-2).usedNumberinSodokuSolver.append( targetSquare(index-2).value)
-          previousSquare.setValue(0)
-          targetSquare(index-2).setValue(0)
-          solve(index-2,targetSquare)
+  // work for normal sodoku
+  // my save file could be the problem
+
+  def solve(index:Int , targetSquare:Vector[Square]) :Option[Vector[Square]]  =
+    println("index"+ index)
+    if isGameRuleBroken then None
+    else if index == targetSquare.size then
+      println("Sucess")
+      Some(this.allSquare())
+    else if targetSquare.nonEmpty then
+      val currentSquare:Square  = targetSquare.apply(index)
+      val candidate:Vector[Int] = currentSquare.possibleNumbers
+      var result:Option[Vector[Square]] = None
+      candidate.find( x=> {
+        println("try"+x)
+        currentSquare.setValue(x)
+        println(isGameRuleBroken.toString)
+        println(currentSquare.getSubArea.get.sum)
+        val re = solve(index+1,targetSquare)
+        if re.nonEmpty then
+          result = re
+          true
         else
-          previousSquare.usedNumberinSodokuSolver.append(previousSquare.value)
-          previousSquare.setValue(0)
-          solve(index-1,targetSquare)
-      else
-        currentSquare.setValue(currentSquare.possibleNumbers(0))
-        solve(index+1,targetSquare)
-    else
-      println(isWin)
+         currentSquare.setValue(0)
+         false
+        })
+        result
+    else None
   end solve
 
 

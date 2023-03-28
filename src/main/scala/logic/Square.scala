@@ -66,13 +66,17 @@ sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
 
   def filledArea() :Vector[Area]= area.map(_.get).filter(_.isFilled)
 
+  /**
+   * @TODO:Need change in validate function
+   */
   def updatePossibleNumbers( ) =
     require( row.isDefined && column.isDefined  && subArea.isDefined && box.isDefined)
     possibleNumbers= validNumber.filter(number =>
          !row   .forall(_.usedDigits.contains(number))
       && !column.forall(_.usedDigits.contains(number))
       && !box   .forall(_.usedDigits.contains(number))
-      && !usedNumberinSodokuSolver.contains(number))
+    )
+
 
 
   def removeFromPossibleNumber( number: Int):Unit =

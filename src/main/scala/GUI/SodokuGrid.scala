@@ -28,7 +28,6 @@ class SodokuGrid(val bottomPane:Array[BottomStackPane]) extends GridPane {
     val bottombar = new GridPane()
     for i <- 0 until bottomPane.length do
       bottombar.add(bottomPane(i), i, 0)
-
     this.columnConstraints = Array.tabulate(9)(x => ColumnConstraints(squareLength))
     this.rowConstraints = Array.tabulate(10)(x => RowConstraints(squareLength))
     this.add(bottombar, 0, 9, 9, 1)
