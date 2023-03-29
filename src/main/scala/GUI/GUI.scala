@@ -17,8 +17,8 @@ import scala.language.postfixOps
  * Main object
  */
 object Main extends JFXApp3:
+  // possible COmb ???
   //SHould some be used in this situation
-  val sodoku=Sodoku.getPuzzle
   def start(): Unit =
     //NOte for references LOL
     //https://stackoverflow.com/questions/46997267/how-do-i-insert-text-into-a-shape-in-javafx
@@ -28,7 +28,7 @@ object Main extends JFXApp3:
       width     = stageWidth
       height    = stageHeight
     val root      = new VBox()
-    val bottomPanes = Array.tabulate(9)( x =>new BottomStackPane(x))
+    val bottomPanes = Array.tabulate(9)( x =>new PossibleNumberNode(x))
     val grid  =  SodokuGrid(bottomPanes)
     grid.update()
     val menuBar =  Menu_Controller(grid,stage)

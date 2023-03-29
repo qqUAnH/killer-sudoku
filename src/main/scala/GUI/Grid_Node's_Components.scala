@@ -21,14 +21,14 @@ import logic.Sodoku
  * when all the squares in the same Area is filled ( have value diffirent to 0)
  * @param pane:
  */
-class SodokuRectangle(  pane: StackedSquare ) extends shape.Rectangle :
-    val color:Color = pane.square.color
-    val square      = pane.square
+class SodokuRectangle(  pane: SquareNode ) extends shape.Rectangle :
+    private val color:Color = pane.square.color
+    private val square      = pane.square
     pane.children.add(this)
     fill=color
     x = 0
     y = 0
-    width = squareLength
+    width =  squareLength
     height = squareLength
     var i = 0
     private def belongTofilledArea = square.filledArea().nonEmpty
@@ -63,7 +63,7 @@ end SodokuRectangle
  *           In detail, the visibilties of these line will initially set to false ,
  *           and will be change to true if the neigbor of the square in the direction of each line is not in the sub area
  */
-def createDottedLine(pane:StackedSquare):Vector[Line]=
+def createDottedLine(pane:SquareNode):Vector[Line]=
   var result:Vector[Line] = Vector()
   var square = pane.square
   var index  = square.position
@@ -106,7 +106,7 @@ def createDottedLine(pane:StackedSquare):Vector[Line]=
  * Each time the user enters the valid input. NumberBox will update its textProperty accordingly via the function update.
  * @param pane:parent StackedSquare
  * */
-class NumberBox( pane:StackedSquare) extends Text :
+class NumberBox( pane:SquareNode) extends Text :
     val square = pane.square
     pane.children.add(this)
     this.scaleX = numberBoxScale
@@ -143,7 +143,7 @@ class NumberBox( pane:StackedSquare) extends Text :
  * @return This function will always return a Vector of 4 Line , Which act as te boundary of The parent StackedSquare.
  *         StorkeWidth of these line will be decided depend of the location of the parent StackedSquare
  */
-def createPath(pane: StackedSquare): Vector[Line] =
+def createPath(pane: SquareNode): Vector[Line] =
   var result: Vector[Line] = Vector()
   var square = pane.square
   var rowindex = square.getRow.map(_.position)
@@ -186,14 +186,13 @@ end createPath
  * away.
  * @param pane:Parent StackedSquare
  */
-class PossibleComb(pane:StackedSquare) extends Text:
+class PossibleComb(pane:SquareNode) extends Text:
   this.setText("")
   val numberBox =pane.numberBox
   pane.children.add(this)
-  def update()=
+  def update():Unit=
     val newValue = pane.square.numberOfPossibleComb
-    if  newValue.isDefined then
-      this.setText(""+newValue.get)
+    this.setText(""+newValue.get)
   this.update()
   this.visible = false
 

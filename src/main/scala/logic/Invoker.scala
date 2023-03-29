@@ -1,19 +1,25 @@
 package logic
 
-import GUI.StackedSquare
+import GUI.SquareNode
 import logic.{SetValueCommand, Square}
 
 import scala.collection.mutable.Stack
+
+
+
+
+
 
 class Invoker() {
   private val undoStack:Stack[SetValueCommand]=Stack[SetValueCommand]()
 
   private val redoStack:Stack[SetValueCommand]=Stack[SetValueCommand]()
 
-  def setValue(pane: StackedSquare, newValue:Int) =
+  def setValue(pane: SquareNode, newValue:Int) =
     redoStack.popAll()
     val command =SetValueCommand(pane,pane.square.value,newValue)
-    command.redo()
+    // change redo to execute
+    command.execute()
     undoStack.push(command)
 
   def undo() =

@@ -17,18 +17,17 @@ class Puzzle {
   for
     rowGroup <- 0 until 3
   do
-    val Rows = Vector.tabulate(3)( x => row(rowGroup*3 +x).squares.grouped(3).toVector)
+    val Rows = Vector.tabulate(3)( x => rows(rowGroup*3 +x).squares.grouped(3).toVector)
     for  y <-0 until 3 do
       val boxSquare:Vector[Square] = Rows.flatMap( _.apply(y))
       println( boxSquare.length)
       boxes = boxes :+ Box( boxSquare, rowGroup*3 +y)
 
-  def setUpPuzzle2( processedData :Vector[SubArea]) =
+  def setUpPuzzle( processedData :Vector[SubArea]):Unit =
     try
       subAreas = Buffer()
       val squareValue = processedData.flatMap(_.squares).sortBy(_.position).map(_.value)
       this.squares.zip(squareValue).foreach(((square: Square, number: Int) => square.setValue(number)))
-
       columns.foreach(_.addSquares())
       rows.foreach(_.addSquares())
       boxes.foreach(_.addSquares())
@@ -38,7 +37,7 @@ class Puzzle {
         newSubArea.addSquares()
         this.subAreas.append(newSubArea)
       subAreas.foreach(_.updatePossibleComb())
-      coloring(0)
+      this.coloring()
 
       if !squares.forall(_.isValid) then
 
@@ -47,36 +46,40 @@ class Puzzle {
         println("Sucess")
     catch
       case _ => println("corrupted data")
-  end setUpPuzzle2
+  end setUpPuzzle
+  // should habe  inner function
+  private def coloring() :Unit =
 
-  private def coloring( index :Int) :Unit =
-    // can throw error here
-    if index == 0 then
-      subAreas(index).newColor()
-      subAreas.drop(1).foreach(area => area.updatePossibleColor())
-      coloring(index+1)
-    else if index < subAreas.length then
-      val area         = subAreas(index)
-      val previousArea = subAreas(index-1)
-      if area.possibleColor.isEmpty then
-        previousArea.possibleColor = previousArea.possibleColor.filter(_ != previousArea.color.get)
-        coloring(index-1)
-      else
-        area.newColor()
-        subAreas.drop(index+1).foreach( area=> area.updatePossibleColor())
-        coloring(index+1)
+    def inner(index:Int) :Unit =
+      if index == 0 then
+        subAreas(index).newColor()
+        subAreas.drop(1).foreach(area => area.updatePossibleColor())
+        inner(index+1)
+      else if index < subAreas.length then
+        val area         = subAreas(index)
+        val previousArea = subAreas(index-1)
+        if area.possibleColor.isEmpty then
+          previousArea.possibleColor = previousArea.possibleColor.filter(_ != previousArea.color.get)
+          inner(index-1)
+        else
+          area.newColor()
+          subAreas.drop(index+1).foreach( area=> area.updatePossibleColor())
+          inner(index+1)
+    end inner
+    inner(0)
+  end coloring
 
 
   def isGameRuleBroken:Boolean =
-    val re = !(allrows().forall(x => x.validate())
-      && allcolumns().forall(x => x.validate())
-      && allBoxes().forall(x=>x.validate())
+    val re = !(getRows.forall(x => x.validate())
+      && getColumns.forall(x => x.validate())
+      && getBoxes.forall(x=>x.validate())
       )
     // gamerule always return true
     re
 
   def isWin :Boolean =
-    allSquare().forall( !_.isEmpty)
+    getSquares.forall( !_.isEmpty)
       && !isGameRuleBroken
 
   // work for normal sodoku
@@ -87,7 +90,7 @@ class Puzzle {
     if isGameRuleBroken then None
     else if index == targetSquare.size then
       println("Sucess")
-      Some(this.allSquare())
+      Some(this.getSquares)
     else if targetSquare.nonEmpty then
       val currentSquare:Square  = targetSquare.apply(index)
       val candidate:Vector[Int] = currentSquare.possibleNumbers
@@ -112,20 +115,18 @@ class Puzzle {
 
 
 
-  def emptySquare       =
+  def emptySquare    =
     squares.filter(_.isEmpty)
 
-  def square(index:Int) = squares(index)
-  def squares( list : Vector[Int]) : Vector[Square] =
-    list.map( x => square(x) )
+  def square(  location:Int) = squares(location)
+  def squares( listOfLocation : Vector[Int]) : Vector[Square] =
+    listOfLocation.map( x => square(x) )
 
-  def row   (index:Int) = rows(index)
-  def column(index:Int) = columns(index)
-  def box   (index:Int) = boxes(index)
 
-  def allrows()     :Vector[Row]      = this.rows
-  def allcolumns()  :Vector[Column]   = this.columns
-  def allSquare()   :Vector[Square]   = this.squares
-  def allSubAreas() :Buffer[SubArea]  = this.subAreas
-  def allBoxes()    = this.boxes
+
+  def getRows     :Vector[Row]      = this.rows
+  def getColumns  :Vector[Column]   = this.columns
+  def getSquares  :Vector[Square]   = this.squares
+  def getSubAreas :Buffer[SubArea]  = this.subAreas
+  def getBoxes    :Vector[Box]      = this.boxes
 }

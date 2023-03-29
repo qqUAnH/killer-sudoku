@@ -7,12 +7,11 @@ import scala.collection.mutable.Buffer
 
 sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
   var possibleNumbers  = Vector.tabulate(9)(x=>x+1)
-  private val validNumber      =Vector.tabulate(9)(x=>x+1)
+  private val validNumber: Vector[Int] = Vector.tabulate(9)(x => x + 1)
   private var row     : Option[Row]     = None
   private var column  : Option[Column]  = None
   private var box     : Option[Box]     = None
   private var subArea : Option[SubArea] = None
-  var usedNumberinSodokuSolver:Buffer[Int] = Buffer()
 
   def getRow      = this.row
   def getColumn   = this.column
@@ -21,12 +20,14 @@ sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
 
   def area : Vector[Option[Area]] = Vector(row,column,box,subArea)
 
+
   def addArea[B <: Area](area: B): Unit =
     area match
       case a: SubArea => this.subArea = Some(a)
       case a: Row => this.row = Some(a)
       case a: Column => this.column = Some(a)
       case a: Box => this.box = Some(a)
+
 
   def sameArea[B <: Area](area: B): Boolean =
     area match
@@ -54,15 +55,15 @@ sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
     box.foreach(_.squares.foreach(_.updatePossibleNumbers()))
     subArea.foreach(_.updatePossibleComb())
 
-  def numberOfPossibleComb:Option[Int] =
-    subArea.map(_.possibleComb)
+  def numberOfPossibleComb:Int =
+    subArea.foreach(_.updatePossibleComb())
+    subArea.map(_.possibleComb).get
 
   def color: Color =
     if this.subArea.isDefined then
       this.subArea.get.color.getOrElse(Color.White)
     else
       Color.White
-
 
   def filledArea() :Vector[Area]= area.map(_.get).filter(_.isFilled)
 
@@ -79,10 +80,6 @@ sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
 
 
 
-  def removeFromPossibleNumber( number: Int):Unit =
-    possibleNumbers = possibleNumbers.filter( _ != number)
-
-
   def neighbor(): Vector[Square] =
     val helper = position+1
     Vector(position+1,position-1,position+9,position-9)
@@ -93,5 +90,5 @@ sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
 //a companion object to create new instances of Square : Will be a great aid to circe Json decoder and encoder
 object Square {
   def apply( value:Int , position: Int ) :Square =
-    new Square(value , position, Sodoku.getPuzzle)
+    new Square(value , position, Sodoku.puzzle)
 }

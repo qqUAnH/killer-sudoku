@@ -7,9 +7,9 @@ import logic._
  * This Class represnt 
  * @param bottomPane:An Array of BottomStackedPane which represnt possible number can be fit to the currently hovered StackedPane according the game rule .
  */
-class SodokuGrid(val bottomPane:Array[BottomStackPane]) extends GridPane {
+class SodokuGrid(val bottomPane:Array[PossibleNumberNode]) extends GridPane {
   
-  var allStackedSquare :Vector[StackedSquare]= Vector()
+  var allStackedSquare :Vector[SquareNode]= Vector()
 
   /**
    * 
@@ -17,7 +17,7 @@ class SodokuGrid(val bottomPane:Array[BottomStackPane]) extends GridPane {
    * @tparam B  :Any subClass of AreaType (could be a row ,column ,box ,and SubArea  )
    * @return    :All stackedSquareNode in the target area.
    */
-  def sameAreaNode[B <: Area](  area: B ) :Vector[StackedSquare] =
+  def sameAreaNode[B <: Area](  area: B ) :Vector[SquareNode] =
     allStackedSquare.filter( _.square.sameArea( area))
 
   /**
@@ -34,5 +34,5 @@ class SodokuGrid(val bottomPane:Array[BottomStackPane]) extends GridPane {
     for {x <- 0 until 9
          y <- 0 until 9
          } do
-      allStackedSquare = allStackedSquare :+ new StackedSquare(x, y, this, bottomPane)
+      allStackedSquare = allStackedSquare :+ new SquareNode(x, y, this, bottomPane)
 }

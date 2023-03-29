@@ -23,7 +23,7 @@ import logic.Sodoku
  * @param bottomBar : an Array of BottomStackPane which together represent possible number that can fit into this square according to te game rule
  */
 
-class StackedSquare(row:Int,column:Int,val gridPane: SodokuGrid,bottomBar:Array[BottomStackPane]) extends StackPane :
+class SquareNode(row:Int, column:Int, val gridPane: SodokuGrid, bottomBar:Array[PossibleNumberNode]) extends StackPane :
     this.focusTraversable = true
     gridPane.add(this,column,row)
     // create and add components to the pane
@@ -33,7 +33,7 @@ class StackedSquare(row:Int,column:Int,val gridPane: SodokuGrid,bottomBar:Array[
     val path           = createPath(this)
     val dot            = createDottedLine(this)
     val possibleComb   = PossibleComb(this)
-    
+
     //ADD a small number at the left cornner of the pane that indicate of of the subArea
     if square.isFirstSquare && square.getSubArea.isDefined then
       val sumText = new Text(""+ square.getSubArea.get.sum)
@@ -42,7 +42,7 @@ class StackedSquare(row:Int,column:Int,val gridPane: SodokuGrid,bottomBar:Array[
       sumText.scaleY = sumTextScale
       sumText.scaleX = sumTextScale
       this.children.add(sumText)
-   
+
     this.onMouseClicked = (m:MouseEvent) => {
       bottomBar.foreach(pane=> pane.updateColor(square.possibleNumbers.contains(pane.number)))
       bottomBar.foreach(_.requestFocus())
@@ -51,7 +51,7 @@ class StackedSquare(row:Int,column:Int,val gridPane: SodokuGrid,bottomBar:Array[
       numberBox.visible    = false
       m.consume()
     }
-end StackedSquare
+end SquareNode
 
 /**
  * Each BottomStackedPane represnt a digit number from 1-9.The Color of this number will turn White if it is possible to put this number
@@ -59,7 +59,7 @@ end StackedSquare
  * Thus 9 instance of this class will enough to represnt all the possible numbers can be put onto a given StackedSquare.
  * @param index: Determine the location of the Pane in the SodokuGrid as well as the digit number this class repesent which is equal to index +1
  */
-class BottomStackPane( index:Int) extends StackPane():
+class PossibleNumberNode(index:Int) extends StackPane():
   val number     = index+1
   private val candidate = new Text(""+(number))
   candidate.scaleX = candidateScale
@@ -72,12 +72,12 @@ class BottomStackPane( index:Int) extends StackPane():
     else
       candidate.fill = Black
   this.alignment = Pos.Center
-
-  private val rectangle = new Rectangle:
+  val rect = new Rectangle:
     width = squareLength
     height =squareLength
     fill =Gray
-  this.children.addAll(rectangle)
+
+  this.children.addAll(rect)
   this.children.add(candidate)
 
 

@@ -13,8 +13,8 @@ import scala.util.Random.nextInt
  */
 class LogicSpec extends AnyFlatSpec :
   val gameObj = Sodoku
-  val allSquares = Sodoku.getPuzzle.allSquare()
-  val allSubAreas = Sodoku.getPuzzle.allSubAreas()
+  val allSquares = Sodoku.puzzle.getSquares
+  val allSubAreas = Sodoku.puzzle.getSubAreas
   val Digits  = Vector.tabulate(9)(x => x+1)
 
 

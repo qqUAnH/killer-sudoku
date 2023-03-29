@@ -29,7 +29,8 @@ object  JSON {
 
   def save(subAreas: Buffer[SubArea], path: Path): String =
     try
-
+      if isAnInvalidPath(path) then throw TryToSaveToSourceFile("")
+      
       val result = subAreas.asJson.noSpaces
       path match
         case e: os.Path => os.write.over(path, result)

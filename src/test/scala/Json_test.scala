@@ -32,6 +32,6 @@ class JsonSpec extends AnyFlatSpec:
   }
 
   "save" should "throw exeception when the user don't choose any file" in {
-    assert( JSON.save(Sodoku.getPuzzle.allSubAreas(), null) == "Save cancelled")
+    assert( JSON.save(Sodoku.puzzle.getSubAreas, null) == "Save cancelled")
   }
   

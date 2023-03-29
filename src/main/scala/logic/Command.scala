@@ -1,5 +1,5 @@
 package logic
-import GUI.StackedSquare
+import GUI.SquareNode
 import scala.collection.mutable.Stack
 
 trait Command {
@@ -8,7 +8,7 @@ trait Command {
   def execute():Unit
 }
 
-sealed case class SetValueCommand(pane: StackedSquare, oldValue :Int, newValue :Int) extends Command:
+sealed case class SetValueCommand(pane: SquareNode, oldValue :Int, newValue :Int) extends Command:
   def undo():Unit =
     pane.requestFocus()
     pane.square.setValue(oldValue)
