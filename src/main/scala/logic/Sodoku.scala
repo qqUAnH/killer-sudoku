@@ -38,11 +38,12 @@ object Sodoku extends App {
   load(JSON.saveFolder / "savefile2.txt")
 
  //TODO:Migrate this to INvoker ?
-  def save( path: Path) = 
+  def save( path: Path) =
     JSON.save(puzzle.getSquares.map(_.getSubArea.get).distinct.toBuffer ,path)
 
 
-
+  @main def testsolve =
+    puzzle.solve(0,puzzle.emptySquareSortedBySubAreaCurrentSum)
 
 
 

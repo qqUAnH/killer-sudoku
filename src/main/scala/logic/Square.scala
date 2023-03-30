@@ -36,8 +36,6 @@ sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
       case a: Column => this.column.get   == area
       case a: Box => this.box.get         == area
 
-
-
   // Any square should belong to a row ,column, box , and subArea , return false if respective varible is undefined
   def isValid       :Boolean = row.isDefined && column.isDefined && box.isDefined && subArea.isDefined && (color != Color.White)
 
@@ -78,14 +76,14 @@ sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
       && !box   .forall(_.usedDigits.contains(number))
     )
 
-
-
   def neighbor(): Vector[Square] =
     val helper = position+1
     Vector(position+1,position-1,position+9,position-9)
       .filter( index => index >= 0 && index < 81)
       .map( index => puzzle.square(index))
       .filter( square => square.row.get == this.row.get || square.column.get == this.column.get )
+
+  override def toString: String = "" + this.value
 }
 //a companion object to create new instances of Square : Will be a great aid to circe Json decoder and encoder
 object Square {

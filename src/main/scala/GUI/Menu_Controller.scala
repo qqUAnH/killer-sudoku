@@ -23,7 +23,7 @@ class Menu_Controller(grid:SodokuGrid ,stage:JFXApp3.PrimaryStage) extends MenuB
   private val saveItem =  MenuItem("Save")
   private val exitItem =  MenuItem("Exit")
   private val loadItem =  Menu("Load")
-  private val solveItem= Menu("Solve")
+  private val solveItem=  MenuItem("Solve")
 
   loadItem.onAction = (e:ActionEvent) => {
     val fileChooser = FileChooser()
@@ -45,14 +45,15 @@ class Menu_Controller(grid:SodokuGrid ,stage:JFXApp3.PrimaryStage) extends MenuB
       case e:NullPointerException => println("No file chossen")
   }
   solveItem.onAction = (e:ActionEvent) => {
-    Sodoku.puzzle.solve(0 , Sodoku.puzzle.emptySquare)
+    println("A")
+    Sodoku.puzzle.solve(0 , Sodoku.puzzle.emptySquareSortedBySubAreaCurrentSum)
     grid.update()
     grid.requestFocus()
   }
   
   exitItem.onAction = (e:ActionEvent) => {sys.exit(0)}
-  fileMenu.items =List( loadItem ,saveItem,new SeparatorMenuItem ,exitItem)
-  this.menus = List(fileMenu,solveItem)
+  fileMenu.items =List( loadItem ,saveItem,new SeparatorMenuItem ,solveItem,exitItem)
+  this.menus = List(fileMenu)
 
 end Menu_Controller
 

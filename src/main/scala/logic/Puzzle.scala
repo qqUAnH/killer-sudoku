@@ -11,7 +11,7 @@ class Puzzle {
   private var columns :Vector[Column]   = Vector.tabulate(9) ( x => Column( squares( Vector.tabulate(9)(i=> i*9+  x)),x))
   private var rows    :Vector[Row]      = Vector.tabulate(9)(x => Row(squares(Vector.tabulate(9)(i => x * 9 + i)), x))
   private var boxes   :Vector[Box]      = Vector()
-  private var subAreas: Buffer[SubArea] = Buffer()
+  private var subAreas:Buffer[SubArea] = Buffer()
 
   // add square to row this is a little bit trickier
   for
@@ -31,7 +31,6 @@ class Puzzle {
       columns.foreach(_.addSquares())
       rows.foreach(_.addSquares())
       boxes.foreach(_.addSquares())
-
       for i <- processedData do
         val newSubArea = new SubArea(  squares(i.squares.map(_.position).toVector) , i.sum)
         newSubArea.addSquares()
@@ -40,16 +39,15 @@ class Puzzle {
       this.coloring()
 
       if !squares.forall(_.isValid) then
-
         throw Exception("corrupted data")
       else
         println("Sucess")
     catch
       case _ => println("corrupted data")
   end setUpPuzzle
+
   // should habe  inner function
   private def coloring() :Unit =
-
     def inner(index:Int) :Unit =
       if index == 0 then
         subAreas(index).newColor()
@@ -74,8 +72,8 @@ class Puzzle {
     val re = !(getRows.forall(x => x.validate())
       && getColumns.forall(x => x.validate())
       && getBoxes.forall(x=>x.validate())
-      )
-    // gamerule always return true
+      && getSubAreas.forall(_.validate())
+    )
     re
 
   def isWin :Boolean =
@@ -84,9 +82,10 @@ class Puzzle {
 
   // work for normal sodoku
   // my save file could be the problem
+  // this is quite slow since we have to ry until 1
 
   def solve(index:Int , targetSquare:Vector[Square]) :Option[Vector[Square]]  =
-    println("index"+ index)
+
     if isGameRuleBroken then None
     else if index == targetSquare.size then
       println("Sucess")
@@ -96,10 +95,7 @@ class Puzzle {
       val candidate:Vector[Int] = currentSquare.possibleNumbers
       var result:Option[Vector[Square]] = None
       candidate.find( x=> {
-        println("try"+x)
         currentSquare.setValue(x)
-        println(isGameRuleBroken.toString)
-        println(currentSquare.getSubArea.get.sum)
         val re = solve(index+1,targetSquare)
         if re.nonEmpty then
           result = re
@@ -112,11 +108,8 @@ class Puzzle {
     else None
   end solve
 
-
-
-
-  def emptySquare    =
-    squares.filter(_.isEmpty)
+  def emptySquareSortedBySubAreaCurrentSum    =
+    squares.filter(_.isEmpty).sortBy(_.getSubArea.get.currentSum)
 
   def square(  location:Int) = squares(location)
   def squares( listOfLocation : Vector[Int]) : Vector[Square] =

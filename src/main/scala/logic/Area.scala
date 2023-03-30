@@ -16,7 +16,6 @@ trait Area(  squares:Vector[Square]) extends Iterable[Square]:
   def usedDigits:Vector[Int] = squares.map( square => square.value).filter( _ != 0)
   def validate()  :Boolean     = usedDigits.distinct.length == usedDigits.length
   def isFilled  :Boolean     = squares.forall(_.value != 0)
-  
   def addSquares():Unit =
     this.squares.foreach(square => square.addArea(this))
 end Area
@@ -71,9 +70,9 @@ case class SubArea( squares:Vector[Square],sum:Int ) extends Area(squares:Vector
     
   override def validate(): Boolean =
     if this.numberOfEmptySquares == 0 then
-     this.currentSum == sum
+     this.currentSum == sum && super.validate()
     else
-     this.currentSum <= sum
+     this.currentSum <= sum && super.validate()
 
 end SubArea
 

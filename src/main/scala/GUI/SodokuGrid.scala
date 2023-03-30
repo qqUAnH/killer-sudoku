@@ -24,6 +24,7 @@ class SodokuGrid(val bottomPane:Array[PossibleNumberNode]) extends GridPane {
    * This method is called once when the Program start , and is called whenever the user load a new puzzle 
    */
   def update() =
+    println("a")
     this.children = List()
     val bottombar = new GridPane()
     for i <- 0 until bottomPane.length do
