@@ -21,6 +21,11 @@ import logic.Sodoku
  * when all the squares in the same Area is filled ( have value diffirent to 0)
  * @param pane:
  */
+trait updatable:
+  def update():Unit
+end updatable
+
+
 class SodokuRectangle(  pane: SquareNode ) extends shape.Rectangle :
     private val color:Color = pane.square.color
     private val square      = pane.square
@@ -37,11 +42,11 @@ class SodokuRectangle(  pane: SquareNode ) extends shape.Rectangle :
       val targetNode = square.filledArea().flatMap(area => pane.gridPane.sameAreaNode(area))
       if belongTofilledArea then
         targetNode.foreach(_.rect.fill.update(Gray))
-        targetNode.foreach(_.requestFocus())
+        targetNode.foreach(_.rect.requestFocus())
         pane.gridPane.requestFocus()
       else
         targetNode.foreach( node => node.rect.update2(false))
-        targetNode.foreach(_.requestFocus())
+        targetNode.foreach(_.rect.requestFocus())
         pane.gridPane.requestFocus()
 
     private def update2(control:Boolean):Unit =
@@ -137,8 +142,6 @@ class NumberBox( pane:SquareNode) extends Text :
         case KeyCode.DIGIT8     => Sodoku.setValue(pane,8)
         case KeyCode.DIGIT9     => Sodoku.setValue(pane,9)
         case KeyCode.BACK_SPACE => Sodoku.setValue(pane,0)
-        case KeyCode.Z          => Sodoku.undo()
-        case KeyCode.Y          => Sodoku.redo()
         case _                  => ()
       this.visible = true
       pane.rect.update1()

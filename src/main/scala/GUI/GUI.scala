@@ -39,6 +39,7 @@ object Main extends JFXApp3:
 
     root.setAlignment(Pos.TopLeft)
 
+
     stage.scene = scene
 
 end Main

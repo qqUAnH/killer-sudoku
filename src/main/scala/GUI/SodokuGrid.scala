@@ -1,6 +1,7 @@
 package GUI
 import javafx.scene.control.Alert.AlertType
 import javafx.scene.control.{Alert, ButtonType}
+import javafx.scene.input.{KeyCode,KeyEvent}
 import scalafx.scene.layout.*
 import logic.*
 
@@ -26,7 +27,12 @@ class SodokuGrid(val bottomPane:Array[PossibleNumberNode]) extends GridPane {
   /**
    * This method is called once when the Program start , and is called whenever the user load a new puzzle 
    */
-
+   this.onKeyPressed = (ke:KeyEvent) => {
+      ke.getCode match
+        case KeyCode.Z          => Sodoku.undo()
+        case KeyCode.Y          => Sodoku.redo()
+        case _                  => ()
+   }
 
   def showWinMessage() =
     val winMsg = new Alert(AlertType.INFORMATION)
@@ -47,7 +53,7 @@ class SodokuGrid(val bottomPane:Array[PossibleNumberNode]) extends GridPane {
          y <- 0 until 9
          } do
       allStackedSquare = allStackedSquare :+ new SquareNode(x, y, this, bottomPane)
-
     this.add( possibleComb ,0 ,10)
+
 }
 
