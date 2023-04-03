@@ -15,6 +15,7 @@ trait Area(  squares:Vector[Square]) extends Iterable[Square]:
   def iterator = squares.iterator
   val alphabet  :Vector[Int] = Vector.tabulate(9)(_ + 1)
   def usedDigits:Vector[Int] = squares.map( square => square.value).filter( _ != 0)
+  def remainDigits:Vector[Int] = alphabet.filter( !usedDigits.contains(_))
   def validate()  :Boolean     = usedDigits.distinct.length == usedDigits.length
   def isFilled  :Boolean     = squares.forall(_.value != 0)
   def addSquares():Unit =
@@ -75,6 +76,22 @@ case class SubArea( squares:Vector[Square],sum:Int ) extends Area(squares:Vector
     else
      this.currentSum <= sum && super.validate()
 
+
+  def possibleCombination2:Vector[Vector[Int]]=
+    def add(number: Int, buff: Vector[Int]): Vector[Vector[Int]] =
+      val other: Vector[Int] = buff :+ number
+      Vector(buff, other)
+    def inner(gather:Vector[Vector[Int]],index:Int) :Vector[Vector[Int]]=
+      if index == remainDigits.size then gather
+      else
+        val nextNumber = remainDigits(index)
+        val nextGather:Vector[Vector[Int]] =gather.flatMap( add(nextNumber,_) ).filter( _.sum <= sum)
+        inner(nextGather,index+1)
+    val re =
+      if remainDigits.nonEmpty then
+        inner(Vector(squares.map(_.value).filter(_!=0)),0).filter(_.sum == sum).filter(_.size == squares.size).map(_.sorted)
+      else Vector(Vector())
+    re
 end SubArea
 
 // Is this necessary>

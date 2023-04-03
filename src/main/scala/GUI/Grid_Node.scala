@@ -54,6 +54,9 @@ class SquareNode(row:Int, column:Int, val gridPane: SodokuGrid,val bottomBar:Arr
       numberBox.visible    = false
       m.consume()
     }
+    this.hoverProperty().onChange( (_,_,_)
+      => gridPane.possibleComb.update(this))
+      
 end SquareNode
 
 /**
@@ -83,7 +86,9 @@ class PossibleNumberNode(index:Int) extends StackPane():
   this.children.addAll(rect)
   this.children.add(candidate)
 
-
+class PossibleComb2 extends Text:
+  def update(pane:SquareNode) =
+    this.setText(pane.square.possibleComb)
 
 
 

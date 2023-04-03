@@ -12,6 +12,7 @@ import logic.*
 class SodokuGrid(val bottomPane:Array[PossibleNumberNode]) extends GridPane {
   
   var allStackedSquare :Vector[SquareNode]= Vector()
+  val possibleComb = new PossibleComb2
 
   /**
    * 
@@ -40,11 +41,13 @@ class SodokuGrid(val bottomPane:Array[PossibleNumberNode]) extends GridPane {
     for i <- 0 until bottomPane.length do
       bottombar.add(bottomPane(i), i, 0)
     this.columnConstraints = Array.tabulate(9)(x => ColumnConstraints(squareLength))
-    this.rowConstraints = Array.tabulate(10)(x => RowConstraints(squareLength))
+    this.rowConstraints = Array.tabulate(11)(x => RowConstraints(squareLength))
     this.add(bottombar, 0, 9, 9, 1)
     for {x <- 0 until 9
          y <- 0 until 9
          } do
       allStackedSquare = allStackedSquare :+ new SquareNode(x, y, this, bottomPane)
+
+    this.add( possibleComb ,0 ,10)
 }
 

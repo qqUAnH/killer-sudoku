@@ -10,16 +10,17 @@ trait Command {
 
 sealed case class SetValueCommand(pane: SquareNode, oldValue :Int, newValue :Int) extends Command:
   def undo():Unit =
-    pane.requestFocus()
+    
     pane.square.setValue(oldValue)
     pane.numberBox.update()
+    pane.requestFocus()
 
   def redo():Unit =
-    pane.requestFocus()
     pane.square.setValue(newValue)
     pane.numberBox.update()
+    pane.requestFocus()
 
   def execute():Unit =
-    pane.requestFocus()
     pane.square.setValue(newValue)
     pane.numberBox.update()
+    pane.requestFocus()

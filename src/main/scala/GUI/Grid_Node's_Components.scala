@@ -117,11 +117,13 @@ class NumberBox( pane:SquareNode) extends Text :
     this.scaleX = numberBoxScale
     this.scaleY = numberBoxScale
     def update():Unit=
+      this.requestFocus()
       if square.value < 10 && square.value > 0 then
         this.textProperty().update(""+square.value)
       else
         this.textProperty().update("")
     this.update()
+
 
     pane.onKeyPressed = (ke:KeyEvent) => {
       ke.getCode match
@@ -142,7 +144,6 @@ class NumberBox( pane:SquareNode) extends Text :
       pane.rect.update1()
       if Sodoku.puzzle.isWin then
         pane.gridPane.showWinMessage()
-
       this.update()
     }
 

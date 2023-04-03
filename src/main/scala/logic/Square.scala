@@ -65,6 +65,8 @@ sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
     subArea.foreach(_.updatePossibleComb())
     subArea.map(_.possibleComb).get
 
+  def possibleComb = subArea.get.possibleCombination2.map( _.mkString("")).mkString(" ")
+
   def color: Color =
     if this.subArea.isDefined then
       this.subArea.get.color.getOrElse(Color.White)
