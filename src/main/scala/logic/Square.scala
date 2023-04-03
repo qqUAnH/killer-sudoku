@@ -13,6 +13,9 @@ sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
   private var box     : Option[Box]     = None
   private var subArea : Option[SubArea] = None
 
+  def possibleNumber2=
+    possibleNumbers.filter(_+subArea.get.currentSum <= subArea.get.sum)
+
   def getRow      = this.row
   def getColumn   = this.column
   def getBox      = this.box

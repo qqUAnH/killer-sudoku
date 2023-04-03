@@ -14,7 +14,7 @@ class SodokuGrid(val bottomPane:Array[PossibleNumberNode]) extends GridPane {
   /**
    * 
    * @param area:Target Area Object
-   * @tparam B  :Any subClass of AreaType (could be a row ,column ,box ,and SubArea  )
+   * @tparam B  :Any subClass of Area Trait (could be a row ,column ,box ,and SubArea  )
    * @return    :All stackedSquareNode in the target area.
    */
   def sameAreaNode[B <: Area](  area: B ) :Vector[SquareNode] =

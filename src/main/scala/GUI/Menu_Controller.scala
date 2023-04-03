@@ -46,7 +46,7 @@ class Menu_Controller(grid:SodokuGrid ,stage:JFXApp3.PrimaryStage) extends MenuB
   }
   solveItem.onAction = (e:ActionEvent) => {
     println("A")
-    Sodoku.puzzle.solve(0 , Sodoku.puzzle.emptySquareSortedBySubAreaCurrentSum)
+    Sodoku.puzzle.solve()
     grid.update()
     grid.requestFocus()
   }

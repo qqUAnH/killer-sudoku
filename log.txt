@@ -105,6 +105,8 @@ Ps: I add some line of code that give information about syntax error incase of y
 
 
 
-
+3/4 Interim report:
+  I have already implemented all of the needed feature so I spend the last two weeks to create a soduko solver as well as well as do some refactoring work.
+  The document are being written I hope I have something to show in our meeting.
 
 

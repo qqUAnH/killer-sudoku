@@ -81,35 +81,38 @@ class Puzzle {
       && !isGameRuleBroken
 
   // work for normal sodoku
-  // my save file could be the problem
+  // my save file could b the problem
   // this is quite slow since we have to ry until 1
 
-  def solve(index:Int , targetSquare:Vector[Square]) :Option[Vector[Square]]  =
-
+  def solve() :Option[Vector[Square]]  =
+    val currentSquare = greedy
     if isGameRuleBroken then None
-    else if index == targetSquare.size then
+    else if greedy.isEmpty then
       println("Sucess")
       Some(this.getSquares)
-    else if targetSquare.nonEmpty then
-      val currentSquare:Square  = targetSquare.apply(index)
-      val candidate:Vector[Int] = currentSquare.possibleNumbers
+    else if greedy.nonEmpty then
+      val candidate:Vector[Int] = currentSquare.get.possibleNumbers
       var result:Option[Vector[Square]] = None
       candidate.find( x=> {
-        currentSquare.setValue(x)
-        val re = solve(index+1,targetSquare)
+        currentSquare.foreach(_.setValue(x))
+        val re = solve()
         if re.nonEmpty then
           result = re
           true
         else
-         currentSquare.setValue(0)
+         currentSquare.get.setValue(0)
          false
         })
         result
     else None
   end solve
 
-  def emptySquareSortedBySubAreaCurrentSum    =
-    squares.filter(_.isEmpty).sortBy(_.getSubArea.get.currentSum)
+  def greedy:Option[Square]=
+    if emptySquares.nonEmpty then
+      Some(emptySquares.minBy( _.possibleNumber2.length))
+    else None
+  def emptySquares :Vector[Square]   =
+    squares.filter(_.isEmpty)
 
   def square(  location:Int) = squares(location)
   def squares( listOfLocation : Vector[Int]) : Vector[Square] =

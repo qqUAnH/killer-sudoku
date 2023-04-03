@@ -77,11 +77,6 @@ case class SubArea( squares:Vector[Square],sum:Int ) extends Area(squares:Vector
 end SubArea
 
 // Is this necessary>
-object SubArea:
-  def apply(squares: Vector[Square] ,sum:Int):SubArea=
-    new SubArea(squares, sum)
-
-
 
 
 

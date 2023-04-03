@@ -43,10 +43,5 @@ object Sodoku extends App {
 
 
   @main def testsolve =
-    puzzle.solve(0,puzzle.emptySquareSortedBySubAreaCurrentSum)
-
-
-
-
-
+    println(puzzle.solve())
 }

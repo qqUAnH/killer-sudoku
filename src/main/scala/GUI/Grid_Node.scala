@@ -36,11 +36,11 @@ class SquareNode(row:Int, column:Int, val gridPane: SodokuGrid, bottomBar:Array[
 
     //ADD a small number at the left cornner of the pane that indicate of of the subArea
     if square.isFirstSquare && square.getSubArea.isDefined then
-      val sumText = new Text(""+ square.getSubArea.get.sum)
-      sumText.alignmentInParent = Pos.TopLeft
-      sumText.fill = Red
-      sumText.scaleY = sumTextScale
-      sumText.scaleX = sumTextScale
+      val sumText = new Text(""+square.getSubArea.get.sum)
+      sumText.alignmentInParent=Pos.TopLeft
+      sumText.translateX = (dottedLineWidth)
+      sumText.translateY = (dottedLineWidth)
+      sumText.fill = Black
       this.children.add(sumText)
 
     this.onMouseClicked = (m:MouseEvent) => {

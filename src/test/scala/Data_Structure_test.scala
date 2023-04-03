@@ -17,8 +17,6 @@ class LogicSpec extends AnyFlatSpec :
   val allSubAreas = Sodoku.puzzle.getSubAreas
   val Digits  = Vector.tabulate(9)(x => x+1)
 
-
-  
   // This series of test below will test if the function setupPuzzle works as intended
   "Every square " should "be assigned to a box" in {
     assert( allSquares.forall(_.getBox.isDefined))
@@ -39,7 +37,6 @@ class LogicSpec extends AnyFlatSpec :
     assert( allSubAreas.forall( _.squares.map(_.color).distinct.length ==1))
   }
 
-
   // This series of test below will test some methods of Square object
   "A square " should " have at least two neighbor" in {
     assert(allSquares.forall(_.neighbor().length >= 2))
@@ -50,6 +47,7 @@ class LogicSpec extends AnyFlatSpec :
      assert(allSquares.forall(_.value ==i))
      allSquares.foreach(_.setValue(0))
   }
+  // need some cahnge
   "updatePossibleNumber" should "change possibleNumber in all square in the same row and collumn" in {
     for square <- allSquares do
       val newValue = Random.nextInt(9)+1
@@ -61,6 +59,8 @@ class LogicSpec extends AnyFlatSpec :
       assert(square.getColumn.forall(_.forall(_.isValid )))
       square.setValue(0)
   }
+
+
  //The data was taken from wiki:  https://en.wikipedia.org/wiki/Killer_sudoku
   "numberOfPossibleCombination" should "return correct number" in {
     val execptedValue = Map (

@@ -37,6 +37,8 @@ class SodokuRectangle(  pane: SquareNode ) extends shape.Rectangle :
       val targetNode = square.filledArea().flatMap(area => pane.gridPane.sameAreaNode(area))
       if belongTofilledArea then
         targetNode.foreach(_.rect.fill.update(Gray))
+        targetNode.foreach(_.requestFocus())
+        pane.gridPane.requestFocus()
       else
         targetNode.foreach( node => node.rect.update2(false))
         targetNode.foreach(_.requestFocus())
@@ -49,7 +51,9 @@ class SodokuRectangle(  pane: SquareNode ) extends shape.Rectangle :
         else
           this.fill.update(color)
 
+    update1()
     parent.value.hoverProperty.onChange((_, _, _) =>
+      this.update1()
       this.update2( parent.value.hoverProperty().value)
     )
 
@@ -135,6 +139,7 @@ class NumberBox( pane:SquareNode) extends Text :
         case _                  => ()
       this.visible = true
       pane.rect.update1()
+
       this.update()
     }
 
