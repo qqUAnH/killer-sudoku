@@ -1,6 +1,8 @@
 package GUI
-import scalafx.scene.layout._
-import logic._
+import javafx.scene.control.Alert.AlertType
+import javafx.scene.control.{Alert, ButtonType}
+import scalafx.scene.layout.*
+import logic.*
 
 
 /**
@@ -18,11 +20,19 @@ class SodokuGrid(val bottomPane:Array[PossibleNumberNode]) extends GridPane {
    * @return    :All stackedSquareNode in the target area.
    */
   def sameAreaNode[B <: Area](  area: B ) :Vector[SquareNode] =
-    allStackedSquare.filter( _.square.sameArea( area))
+    allStackedSquare.filter( _.square.belongToArea( area))
 
   /**
    * This method is called once when the Program start , and is called whenever the user load a new puzzle 
    */
+
+
+  def showWinMessage() =
+    val winMsg = new Alert(AlertType.INFORMATION)
+    winMsg.setTitle("MSG")
+    winMsg.setContentText("YOU WON-YAY!!!")
+    winMsg.showAndWait.ifPresent( (rs: ButtonType) =>  if (rs eq ButtonType.OK) System.out.println("Pressed OK."))
+
   def update() =
     println("a")
     this.children = List()
@@ -37,3 +47,4 @@ class SodokuGrid(val bottomPane:Array[PossibleNumberNode]) extends GridPane {
          } do
       allStackedSquare = allStackedSquare :+ new SquareNode(x, y, this, bottomPane)
 }
+

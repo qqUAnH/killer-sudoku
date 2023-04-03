@@ -4,6 +4,7 @@ import scala.collection.Iterator
 import scalafx.scene.paint.Color
 import scala.util.Random
 
+//any really use Iterator isit ok
 trait Iterator[Square]:
   def hasNext:Boolean
 
@@ -55,7 +56,7 @@ case class SubArea( squares:Vector[Square],sum:Int ) extends Area(squares:Vector
         + calculatePossibleCombination(numberOfSquares - 1, alphabet.drop(1), sum - alphabet(0))
       
   def updatePossibleComb():Unit =
-    possibleComb= calculatePossibleCombination(numberOfEmptySquares , alphabet , sum-currentSum)
+    possibleComb= calculatePossibleCombination(numberOfEmptySquares , alphabet.filter( !usedDigits.contains(_)) , sum-currentSum)
 
   def neighbour: Vector[SubArea] =
     this.squares.flatMap(square => square.neighbor()).filter(square => square.getSubArea.get != this).map(square => square.getSubArea.get).distinct.toVector

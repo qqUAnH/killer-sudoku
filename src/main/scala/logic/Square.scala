@@ -6,24 +6,26 @@ import scalafx.scene.paint.Color
 import scala.collection.mutable.Buffer
 
 sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
-  var possibleNumbers  = Vector.tabulate(9)(x=>x+1)
+  private var possibleNumbers  = Vector.tabulate(9)(x=>x+1)
   private val validNumber: Vector[Int] = Vector.tabulate(9)(x => x + 1)
   private var row     : Option[Row]     = None
   private var column  : Option[Column]  = None
   private var box     : Option[Box]     = None
   private var subArea : Option[SubArea] = None
-
-  def possibleNumber2=
-    possibleNumbers.filter(_+subArea.get.currentSum <= subArea.get.sum)
+  //methods is used to help us take the data out only
+  def possibleNumbers(takeSubAreaIntoConsideration :Boolean):Vector[Int]=
+    if takeSubAreaIntoConsideration then
+      possibleNumbers.filter(_+subArea.get.currentSum <= subArea.get.sum)
+    else possibleNumbers
 
   def getRow      = this.row
   def getColumn   = this.column
   def getBox      = this.box
   def getSubArea  = this.subArea
-
   def area : Vector[Option[Area]] = Vector(row,column,box,subArea)
 
 
+  //called when the we try to load new puzzle ,this methods should change the row, column, box, SUbArea to others value than None
   def addArea[B <: Area](area: B): Unit =
     area match
       case a: SubArea => this.subArea = Some(a)
@@ -31,8 +33,8 @@ sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
       case a: Column => this.column = Some(a)
       case a: Box => this.box = Some(a)
 
-
-  def sameArea[B <: Area](area: B): Boolean =
+  //Will be used in GUI to connect related Node.
+  def belongToArea[B <: Area](area: B): Boolean =
     area match
       case a: SubArea => this.subArea.get == area
       case a: Row => this.row.get         == area
@@ -45,6 +47,9 @@ sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
   def haveNonePossilbeNumber:Boolean = this.possibleNumbers.isEmpty
 
   def isFirstSquare :Boolean = subArea.map( area => area.squares.head).forall( _ == this )
+
+  //reutrn an Vector of Area which is filed this square belong to
+  def filledArea() :Vector[Area]= area.map(_.get).filter(_.isFilled)
 
   def isEmpty       :Boolean = this.value == 0
   //change value of a square then update posssible squares in the same row , column and box
@@ -66,7 +71,6 @@ sealed class Square(var value:Int , val position:Int , val puzzle: Puzzle) {
     else
       Color.White
 
-  def filledArea() :Vector[Area]= area.map(_.get).filter(_.isFilled)
 
   /**
    * @TODO:Need change in validate function

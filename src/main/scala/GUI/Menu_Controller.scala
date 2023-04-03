@@ -45,10 +45,10 @@ class Menu_Controller(grid:SodokuGrid ,stage:JFXApp3.PrimaryStage) extends MenuB
       case e:NullPointerException => println("No file chossen")
   }
   solveItem.onAction = (e:ActionEvent) => {
-    println("A")
     Sodoku.puzzle.solve()
     grid.update()
     grid.requestFocus()
+    grid.showWinMessage()
   }
   
   exitItem.onAction = (e:ActionEvent) => {sys.exit(0)}

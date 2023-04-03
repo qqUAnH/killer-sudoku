@@ -91,7 +91,7 @@ class Puzzle {
       println("Sucess")
       Some(this.getSquares)
     else if greedy.nonEmpty then
-      val candidate:Vector[Int] = currentSquare.get.possibleNumbers
+      val candidate:Vector[Int] = currentSquare.get.possibleNumbers(true)
       var result:Option[Vector[Square]] = None
       candidate.find( x=> {
         currentSquare.foreach(_.setValue(x))
@@ -109,7 +109,7 @@ class Puzzle {
 
   def greedy:Option[Square]=
     if emptySquares.nonEmpty then
-      Some(emptySquares.minBy( _.possibleNumber2.length))
+      Some(emptySquares.minBy( _.possibleNumbers(true).length))
     else None
   def emptySquares :Vector[Square]   =
     squares.filter(_.isEmpty)

@@ -53,6 +53,7 @@ class SodokuRectangle(  pane: SquareNode ) extends shape.Rectangle :
 
     update1()
     parent.value.hoverProperty.onChange((_, _, _) =>
+      pane.bottomBar.foreach(pane=> pane.update(square.possibleNumbers(false).contains(pane.number)))
       this.update1()
       this.update2( parent.value.hoverProperty().value)
     )
@@ -139,6 +140,8 @@ class NumberBox( pane:SquareNode) extends Text :
         case _                  => ()
       this.visible = true
       pane.rect.update1()
+      if Sodoku.puzzle.isWin then
+        pane.gridPane.showWinMessage()
 
       this.update()
     }

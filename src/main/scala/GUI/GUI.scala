@@ -24,7 +24,7 @@ object Main extends JFXApp3:
     //https://stackoverflow.com/questions/46997267/how-do-i-insert-text-into-a-shape-in-javafx
     //Create primary stage
     stage = new JFXApp3.PrimaryStage:
-      title     = "KILLER-SODOKU"
+      title     = "KILLER-SUDOKU"
       width     = stageWidth
       height    = stageHeight
     val root      = new VBox()

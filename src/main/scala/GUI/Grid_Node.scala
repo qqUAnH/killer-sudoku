@@ -13,6 +13,9 @@ import scalafx.geometry.Pos
 import scalafx.Includes.*
 import scalafx.scene.shape.Line
 import logic.Sodoku
+import javafx.scene.control.Alert
+import javafx.scene.control.Alert.AlertType
+import javafx.scene.control.ButtonType
 
 
 /**Each class StackedSquare represent a Square in sodoku grid.
@@ -23,7 +26,7 @@ import logic.Sodoku
  * @param bottomBar : an Array of BottomStackPane which together represent possible number that can fit into this square according to te game rule
  */
 
-class SquareNode(row:Int, column:Int, val gridPane: SodokuGrid, bottomBar:Array[PossibleNumberNode]) extends StackPane :
+class SquareNode(row:Int, column:Int, val gridPane: SodokuGrid,val bottomBar:Array[PossibleNumberNode]) extends StackPane :
     this.focusTraversable = true
     gridPane.add(this,column,row)
     // create and add components to the pane
@@ -43,8 +46,8 @@ class SquareNode(row:Int, column:Int, val gridPane: SodokuGrid, bottomBar:Array[
       sumText.fill = Black
       this.children.add(sumText)
 
+
     this.onMouseClicked = (m:MouseEvent) => {
-      bottomBar.foreach(pane=> pane.updateColor(square.possibleNumbers.contains(pane.number)))
       bottomBar.foreach(_.requestFocus())
       this.requestFocus()
       possibleComb.visible = true
@@ -66,7 +69,7 @@ class PossibleNumberNode(index:Int) extends StackPane():
   candidate.scaleY = candidateScale
 
   // change color of candidate :Text to Read if the candidate number is according to the game rule , black otherwise )
-  def updateColor(possible: Boolean): Unit =
+  def update(possible: Boolean): Unit =
     if possible then
       candidate.fill = White
     else

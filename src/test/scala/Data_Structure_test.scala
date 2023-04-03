@@ -59,8 +59,6 @@ class LogicSpec extends AnyFlatSpec :
       assert(square.getColumn.forall(_.forall(_.isValid )))
       square.setValue(0)
   }
-
-
  //The data was taken from wiki:  https://en.wikipedia.org/wiki/Killer_sudoku
   "numberOfPossibleCombination" should "return correct number" in {
     val execptedValue = Map (
