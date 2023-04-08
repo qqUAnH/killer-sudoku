@@ -34,10 +34,9 @@ class SodokuGrid(val bottomPane:Array[PossibleNumberNode]) extends GridPane {
         case _                  => ()
    }
 
-  def showWinMessage() =
+  def showMessage(msg:String) =
     val winMsg = new Alert(AlertType.INFORMATION)
-    winMsg.setTitle("MSG")
-    winMsg.setContentText("YOU WON-YAY!!!")
+    winMsg.setContentText(msg)
     winMsg.showAndWait.ifPresent( (rs: ButtonType) =>  if (rs eq ButtonType.OK) System.out.println("Pressed OK."))
 
   def update() =

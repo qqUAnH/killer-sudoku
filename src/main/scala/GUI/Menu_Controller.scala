@@ -48,7 +48,10 @@ class Menu_Controller(grid:SodokuGrid ,stage:JFXApp3.PrimaryStage) extends MenuB
     Sodoku.puzzle.solve()
     grid.update()
     grid.requestFocus()
-    grid.showWinMessage()
+    if Sodoku.puzzle.isWin then
+      grid.showMessage("sucess")
+    else
+      grid.showMessage("fail to solve the puzlle")
   }
   
   exitItem.onAction = (e:ActionEvent) => {sys.exit(0)}

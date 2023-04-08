@@ -146,7 +146,7 @@ class NumberBox( pane:SquareNode) extends Text :
       this.visible = true
       pane.rect.update1()
       if Sodoku.puzzle.isWin then
-        pane.gridPane.showWinMessage()
+        pane.gridPane.showMessage("you win")
       this.update()
     }
 
